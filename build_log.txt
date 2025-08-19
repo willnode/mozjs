@@ -1,0 +1,145 @@
+   Compiling unicode-ident v1.0.18
+   Compiling proc-macro2 v1.0.101
+   Compiling stable_deref_trait v1.2.0
+   Compiling libc v0.2.175
+   Compiling cfg-if v1.0.1
+   Compiling writeable v0.5.5
+   Compiling litemap v0.7.5
+   Compiling glob v0.3.3
+   Compiling icu_locid_transform_data v1.5.1
+   Compiling shlex v1.3.0
+   Compiling libm v0.2.15
+   Compiling bitflags v2.9.2
+   Compiling rustix v1.0.8
+   Compiling crc32fast v1.5.0
+   Compiling linux-raw-sys v0.9.4
+   Compiling regex-syntax v0.8.5
+   Compiling serde v1.0.219
+   Compiling minimal-lexical v0.2.1
+   Compiling memchr v2.7.5
+   Compiling icu_properties_data v1.5.1
+   Compiling either v1.15.0
+   Compiling bindgen v0.71.1
+   Compiling pkg-config v0.3.32
+   Compiling adler2 v2.0.1
+   Compiling icu_segmenter_data v1.5.1
+   Compiling strck v0.1.2
+   Compiling vcpkg v0.2.15
+   Compiling icu_calendar_data v1.5.1
+   Compiling same-file v1.0.6
+   Compiling rustc-hash v2.1.1
+   Compiling encoding_c_mem v0.2.6
+   Compiling libloading v0.8.8
+   Compiling encoding_c v0.9.8
+   Compiling lazy_static v1.5.0
+   Compiling cc v1.2.33
+   Compiling miniz_oxide v0.8.9
+   Compiling smallvec v1.15.1
+   Compiling walkdir v2.5.0
+   Compiling encoding_rs v0.8.35
+   Compiling unicode-bidi v0.3.18
+   Compiling utf8_iter v1.0.4
+   Compiling diplomat-runtime v0.8.2
+   Compiling log v0.4.27
+   Compiling strck_ident v0.1.2
+   Compiling itertools v0.13.0
+   Compiling clang-sys v1.8.1
+   Compiling flate2 v1.1.2
+   Compiling nom v7.1.3
+   Compiling quote v1.0.40
+   Compiling syn v2.0.106
+   Compiling filetime v0.2.25
+   Compiling core_maths v0.1.1
+   Compiling regex-automata v0.4.9
+   Compiling libz-sys v1.1.22
+   Compiling xattr v1.5.1
+   Compiling tar v0.4.44
+   Compiling cexpr v0.6.0
+   Compiling regex v1.11.1
+   Compiling synstructure v0.13.2
+   Compiling zerofrom-derive v0.1.6
+   Compiling yoke-derive v0.7.5
+   Compiling displaydoc v0.2.5
+   Compiling zerovec-derive v0.10.3
+   Compiling icu_provider_macros v1.5.0
+   Compiling serde_derive v1.0.219
+   Compiling calendrical_calculations v0.1.3
+   Compiling zerofrom v0.1.6
+   Compiling yoke v0.7.5
+   Compiling zerovec v0.10.4
+   Compiling tinystr v0.7.6
+   Compiling icu_collections v1.5.0
+   Compiling icu_locid v1.5.0
+   Compiling icu_provider v1.5.0
+   Compiling icu_locid_transform v1.5.0
+   Compiling icu_segmenter v1.5.0
+   Compiling icu_calendar v1.5.2
+   Compiling icu_provider_adapters v1.5.0
+   Compiling icu_properties v1.5.1
+   Compiling mozjs_sys v0.137.0-3 (/home/andrzej/otherr/mozjs/mozjs-sys)
+   Compiling diplomat_core v0.8.1
+   Compiling diplomat v0.8.0
+   Compiling icu_capi v1.5.0
+warning: mozjs_sys@0.137.0-3: ./src/jsapi.cpp: In function 'void glue::JS_StackCapture_AllFrames(JS::StackCapture*)':
+warning: mozjs_sys@0.137.0-3: ./src/jsapi.cpp:88:9: warning: 'void* memcpy(void*, const void*, size_t)' writing to an object of type 'using JS::StackCapture = class mozilla::Variant<JS::AllFrames, JS::MaxFrames, JS::FirstSubsumedFrame>' {aka 'class mozilla::Variant<JS::AllFrames, JS::MaxFrames, JS::FirstSubsumedFrame>'} with no trivial copy-assignment; use copy-assignment or copy-initialization instead [-Wclass-memaccess]
+warning: mozjs_sys@0.137.0-3:    88 |   memcpy(capture, &all, sizeof(JS::StackCapture));
+warning: mozjs_sys@0.137.0-3:       |   ~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+warning: mozjs_sys@0.137.0-3: In file included from /home/andrzej/otherr/mozjs/target/x86_64-unknown-redox/debug/build/mozjs_sys-f718659da5b29c0a/out/build/dist/include/jsapi.h:20,
+warning: mozjs_sys@0.137.0-3:                  from ./src/jsapi.cpp:7:
+warning: mozjs_sys@0.137.0-3: /home/andrzej/otherr/mozjs/target/x86_64-unknown-redox/debug/build/mozjs_sys-f718659da5b29c0a/out/build/dist/include/mozilla/Variant.h:570:69: note: 'using JS::StackCapture = class mozilla::Variant<JS::AllFrames, JS::MaxFrames, JS::FirstSubsumedFrame>' {aka 'class mozilla::Variant<JS::AllFrames, JS::MaxFrames, JS::FirstSubsumedFrame>'} declared here
+warning: mozjs_sys@0.137.0-3:   570 | class MOZ_INHERIT_TYPE_ANNOTATIONS_FROM_TEMPLATE_ARGS MOZ_NON_PARAM Variant {
+warning: mozjs_sys@0.137.0-3:       |                                                                     ^~~~~~~
+warning: mozjs_sys@0.137.0-3: ./src/jsapi.cpp: In function 'void glue::JS_StackCapture_MaxFrames(uint32_t, JS::StackCapture*)':
+warning: mozjs_sys@0.137.0-3: ./src/jsapi.cpp:93:9: warning: 'void* memcpy(void*, const void*, size_t)' writing to an object of type 'using JS::StackCapture = class mozilla::Variant<JS::AllFrames, JS::MaxFrames, JS::FirstSubsumedFrame>' {aka 'class mozilla::Variant<JS::AllFrames, JS::MaxFrames, JS::FirstSubsumedFrame>'} with no trivial copy-assignment; use copy-assignment or copy-initialization instead [-Wclass-memaccess]
+warning: mozjs_sys@0.137.0-3:    93 |   memcpy(capture, &maxFrames, sizeof(JS::StackCapture));
+warning: mozjs_sys@0.137.0-3:       |   ~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+warning: mozjs_sys@0.137.0-3: /home/andrzej/otherr/mozjs/target/x86_64-unknown-redox/debug/build/mozjs_sys-f718659da5b29c0a/out/build/dist/include/mozilla/Variant.h:570:69: note: 'using JS::StackCapture = class mozilla::Variant<JS::AllFrames, JS::MaxFrames, JS::FirstSubsumedFrame>' {aka 'class mozilla::Variant<JS::AllFrames, JS::MaxFrames, JS::FirstSubsumedFrame>'} declared here
+warning: mozjs_sys@0.137.0-3:   570 | class MOZ_INHERIT_TYPE_ANNOTATIONS_FROM_TEMPLATE_ARGS MOZ_NON_PARAM Variant {
+warning: mozjs_sys@0.137.0-3:       |                                                                     ^~~~~~~
+warning: mozjs_sys@0.137.0-3: ./src/jsapi.cpp: In function 'void glue::JS_StackCapture_FirstSubsumedFrame(JSContext*, bool, JS::StackCapture*)':
+warning: mozjs_sys@0.137.0-3: ./src/jsapi.cpp:101:9: warning: 'void* memcpy(void*, const void*, size_t)' writing to an object of type 'using JS::StackCapture = class mozilla::Variant<JS::AllFrames, JS::MaxFrames, JS::FirstSubsumedFrame>' {aka 'class mozilla::Variant<JS::AllFrames, JS::MaxFrames, JS::FirstSubsumedFrame>'} with no trivial copy-assignment; use copy-assignment or copy-initialization instead [-Wclass-memaccess]
+warning: mozjs_sys@0.137.0-3:   101 |   memcpy(capture, &subsumed, sizeof(JS::StackCapture));
+warning: mozjs_sys@0.137.0-3:       |   ~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+warning: mozjs_sys@0.137.0-3: /home/andrzej/otherr/mozjs/target/x86_64-unknown-redox/debug/build/mozjs_sys-f718659da5b29c0a/out/build/dist/include/mozilla/Variant.h:570:69: note: 'using JS::StackCapture = class mozilla::Variant<JS::AllFrames, JS::MaxFrames, JS::FirstSubsumedFrame>' {aka 'class mozilla::Variant<JS::AllFrames, JS::MaxFrames, JS::FirstSubsumedFrame>'} declared here
+warning: mozjs_sys@0.137.0-3:   570 | class MOZ_INHERIT_TYPE_ANNOTATIONS_FROM_TEMPLATE_ARGS MOZ_NON_PARAM Variant {
+warning: mozjs_sys@0.137.0-3:       |                                                                     ^~~~~~~
+warning: mozjs_sys@0.137.0-3: At global scope:
+warning: mozjs_sys@0.137.0-3: cc1plus: note: unrecognized command-line option '-Wno-unused-private-field' may have been intended to silence earlier diagnostics
+warning: mozjs_sys@0.137.0-3: cc1plus: note: unrecognized command-line option '-Wno-return-type-c-linkage' may have been intended to silence earlier diagnostics
+warning: mozjs_sys@0.137.0-3: cc1plus: note: unrecognized command-line option '-Wno-c++0x-extensions' may have been intended to silence earlier diagnostics
+warning: mozjs_sys@0.137.0-3: ./src/jsglue.cpp: In function 'void DeleteWrapperProxyHandler(const void*)':
+warning: mozjs_sys@0.137.0-3: ./src/jsglue.cpp:681:3: warning: deleting object of polymorphic class type 'WrapperProxyHandler' which has non-virtual destructor might cause undefined behavior [-Wdelete-non-virtual-dtor]
+warning: mozjs_sys@0.137.0-3:   681 |   delete static_cast<const WrapperProxyHandler*>(handler);
+warning: mozjs_sys@0.137.0-3:       |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+warning: mozjs_sys@0.137.0-3: In file included from /home/andrzej/otherr/mozjs/target/x86_64-unknown-redox/debug/build/mozjs_sys-f718659da5b29c0a/out/build/dist/include/mozilla/BitSet.h:13,
+warning: mozjs_sys@0.137.0-3:                  from /home/andrzej/otherr/mozjs/target/x86_64-unknown-redox/debug/build/mozjs_sys-f718659da5b29c0a/out/build/dist/include/js/HeapAPI.h:11,
+warning: mozjs_sys@0.137.0-3:                  from /home/andrzej/otherr/mozjs/target/x86_64-unknown-redox/debug/build/mozjs_sys-f718659da5b29c0a/out/build/dist/include/js/TracingAPI.h:11,
+warning: mozjs_sys@0.137.0-3:                  from /home/andrzej/otherr/mozjs/target/x86_64-unknown-redox/debug/build/mozjs_sys-f718659da5b29c0a/out/build/dist/include/js/GCPolicyAPI.h:79,
+warning: mozjs_sys@0.137.0-3:                  from /home/andrzej/otherr/mozjs/target/x86_64-unknown-redox/debug/build/mozjs_sys-f718659da5b29c0a/out/build/dist/include/js/RootingAPI.h:24,
+warning: mozjs_sys@0.137.0-3:                  from /home/andrzej/otherr/mozjs/target/x86_64-unknown-redox/debug/build/mozjs_sys-f718659da5b29c0a/out/build/dist/include/js/CallArgs.h:73,
+warning: mozjs_sys@0.137.0-3:                  from /home/andrzej/otherr/mozjs/target/x86_64-unknown-redox/debug/build/mozjs_sys-f718659da5b29c0a/out/build/dist/include/js/Class.h:17,
+warning: mozjs_sys@0.137.0-3:                  from ./src/jsglue.cpp:19:
+warning: mozjs_sys@0.137.0-3: /home/andrzej/otherr/mozjs/target/x86_64-unknown-redox/debug/build/mozjs_sys-f718659da5b29c0a/out/build/dist/include/mozilla/PodOperations.h: In instantiation of 'void mozilla::PodZero(T*) [with T = JS::ServoSizes]':
+warning: mozjs_sys@0.137.0-3: ./src/jsglue.cpp:919:19:   required from here
+warning: mozjs_sys@0.137.0-3: /home/andrzej/otherr/mozjs/target/x86_64-unknown-redox/debug/build/mozjs_sys-f718659da5b29c0a/out/build/dist/include/mozilla/PodOperations.h:37:9: warning: 'void* memset(void*, int, size_t)' clearing an object of non-trivial type 'struct JS::ServoSizes'; use assignment or value-initialization instead [-Wclass-memaccess]
+warning: mozjs_sys@0.137.0-3:    37 |   memset(aT, 0, sizeof(T));
+warning: mozjs_sys@0.137.0-3:       |   ~~~~~~^~~~~~~~~~~~~~~~~~
+warning: mozjs_sys@0.137.0-3: In file included from ./src/jsglue.cpp:22:
+warning: mozjs_sys@0.137.0-3: /home/andrzej/otherr/mozjs/target/x86_64-unknown-redox/debug/build/mozjs_sys-f718659da5b29c0a/out/build/dist/include/js/MemoryMetrics.h:72:8: note: 'struct JS::ServoSizes' declared here
+warning: mozjs_sys@0.137.0-3:    72 | struct ServoSizes {
+warning: mozjs_sys@0.137.0-3:       |        ^~~~~~~~~~
+warning: mozjs_sys@0.137.0-3: At global scope:
+warning: mozjs_sys@0.137.0-3: cc1plus: note: unrecognized command-line option '-Wno-unused-private-field' may have been intended to silence earlier diagnostics
+warning: mozjs_sys@0.137.0-3: cc1plus: note: unrecognized command-line option '-Wno-return-type-c-linkage' may have been intended to silence earlier diagnostics
+warning: mozjs_sys@0.137.0-3: cc1plus: note: unrecognized command-line option '-Wno-c++0x-extensions' may have been intended to silence earlier diagnostics
+   Compiling mozjs v0.14.1 (/home/andrzej/otherr/mozjs/mozjs)
+warning: unused import: `self`
+  --> mozjs/src/rust.rs:11:16
+   |
+11 | use std::ffi::{self, CString};
+   |                ^^^^
+   |
+   = note: `#[warn(unused_imports)]` on by default
+
+warning: `mozjs` (lib) generated 1 warning (run `cargo fix --lib -p mozjs` to apply 1 suggestion)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 2m 05s
