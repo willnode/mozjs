@@ -1512,6 +1512,10 @@ def compiler(
             wrapper.extend(provided_compiler.wrapper)
             flags.extend(provided_compiler.flags)
 
+        # TODO(njskalski): Added exception for Redox, because the compiler says "unknown" which is always an error here
+        is_redox = compiler.endswith("unknown-redox-gcc") or compiler.endswith("unknown-redox-g++")
+
+
         info = check_compiler(
             configure_cache,
             wrapper + [compiler] + flags,
@@ -1569,16 +1573,19 @@ def compiler(
             )
 
         if not info.target_kernel or (info.target_kernel != host_or_target.kernel):
-            raise FatalCheckError(
-                "%s %s compiler target kernel (%s) does not match --%s kernel (%s)"
-                % (
-                    host_or_target_str.capitalize(),
-                    language,
-                    info.target_kernel or "unknown",
-                    host_or_target_str,
-                    host_or_target.kernel,
-                )
-            )
+            if not is_redox:
+                raise FatalCheckError(
+                    "%s %s compiler target kernel (%s) does not match --%s kernel (%s) [%s]"
+                    % (
+                        host_or_target_str.capitalize(),
+                        language,
+                        info.target_kernel or "unknown",
+                        host_or_target_str,
+                        host_or_target.kernel,
+                        str(compiler)
+                    )
+                 )
+
 
         if not info.target_endianness or (
             info.target_endianness != host_or_target.endianness

@@ -48,7 +48,7 @@ class MutexImpl {
 
   PlatformData* platformData();
 
-#if !defined(XP_WIN) && !defined(__wasi__)
+#if !defined(XP_WIN) && !defined(__wasi__) && !defined(__redox__)
   void* platformData_[sizeof(pthread_mutex_t) / sizeof(void*)];
   static_assert(sizeof(pthread_mutex_t) / sizeof(void*) != 0 &&
                     sizeof(pthread_mutex_t) % sizeof(void*) == 0,

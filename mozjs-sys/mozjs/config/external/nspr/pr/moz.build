@@ -71,6 +71,16 @@ elif CONFIG["OS_TARGET"] == "SunOS":
     elif CONFIG["TARGET_CPU"] == "sparc64":
         ASFLAGS += ["-x", "assembler-with-cpp", "-D_ASM"]
         SOURCES += ["/nsprpub/pr/src/md/unix/os_SunOS_sparcv9.s"]
+elif CONFIG["OS_TARGET"] == "Redox":
+    # Treat Redox similar to Linux for x86_64
+    DEFINES["LINUX"] = True
+    DEFINES["HAVE_FCNTL_FILE_LOCKING"] = True
+    DEFINES["HAVE_POINTER_LOCALTIME_R"] = True
+    DEFINES["_GNU_SOURCE"] = True
+    SOURCES += ["/nsprpub/pr/src/md/unix/linux.c"]
+    if CONFIG["TARGET_CPU"] == "x86_64":
+        SOURCES += ["/nsprpub/pr/src/md/unix/os_Linux_x86_64.s"]
+
 elif CONFIG["OS_TARGET"] == "WINNT":
     OS_LIBS += [
         "advapi32",
@@ -251,6 +261,7 @@ EXPORTS.nspr.md += [
     "/nsprpub/pr/include/md/_linux.cfg",
     "/nsprpub/pr/include/md/_netbsd.cfg",
     "/nsprpub/pr/include/md/_openbsd.cfg",
+    "/nsprpub/pr/include/md/_redox.cfg",
     "/nsprpub/pr/include/md/_solaris.cfg",
     "/nsprpub/pr/include/md/_win95.cfg",
 ]

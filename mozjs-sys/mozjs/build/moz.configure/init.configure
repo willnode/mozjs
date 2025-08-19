@@ -521,6 +521,8 @@ def split_triplet(triplet, allow_wasi=False):
         canonical_os = canonical_kernel = "SunOS"
     elif os.startswith("wasi") and allow_wasi:
         canonical_os = canonical_kernel = "WASI"
+    elif os.startswith("redox"):
+        canonical_os = canonical_kernel = "Redox"
     else:
         raise ValueError("Unknown OS: %s" % os)
 

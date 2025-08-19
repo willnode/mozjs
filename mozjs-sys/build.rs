@@ -407,6 +407,11 @@ fn link_bindgen_static_lib_binaries(build_dir: &Path) {
 /// Check env variable conditions to decide if we need to link pre-built archive first.
 /// And then return bool value to notify if we need to build from source instead.
 fn should_build_from_source() -> bool {
+    if env::var("TARGET").unwrap_or_default().contains("redox") {
+        println!("Building on Redox OS. Building from source directly.");
+        return true;
+    }
+
     if env::var_os("MOZJS_FROM_SOURCE").is_some() {
         println!("Environment variable MOZJS_FROM_SOURCE is set. Building from source directly.");
         true

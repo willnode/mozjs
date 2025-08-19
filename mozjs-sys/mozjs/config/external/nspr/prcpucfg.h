@@ -24,6 +24,8 @@
 #  include "md/_linux.cfg"
 #elif defined(__sun__)
 #  include "md/_solaris.cfg"
+#elif defined(__redox__)
+#  include "md/_redox.cfg"
 #else
 #  error "Unsupported platform!"
 #endif
