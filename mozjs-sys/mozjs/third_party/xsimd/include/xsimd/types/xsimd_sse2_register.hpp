@@ -16,7 +16,9 @@
 #include "./xsimd_register.hpp"
 
 #if XSIMD_WITH_SSE2
+#ifndef __redox__
 #include <emmintrin.h>
+#endif //__redox__
 #include <xmmintrin.h>
 #endif
 

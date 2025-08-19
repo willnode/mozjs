@@ -30,7 +30,9 @@
 
 #if defined(__i386) || defined(_M_IX86) || defined(__x86_64__) || \
     defined(_M_X64)
+#ifndef __redox__
 #  include <emmintrin.h>
+#endif //__redox__
 #endif
 
 namespace mozilla {
@@ -539,7 +541,9 @@ class Atomic<double, Order> : protected detail::AtomicBase<double, Order> {
 inline void cpu_pause() {
 #if defined(__i386) || defined(_M_IX86) || defined(__x86_64__) || \
     defined(_M_X64)
+#ifndef __redox__
   _mm_pause();
+#endif // __redox__
 #endif
 }
 

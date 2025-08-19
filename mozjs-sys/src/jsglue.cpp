@@ -891,6 +891,8 @@ void DeleteRootedObjectVector(JS::PersistentRootedObjectVector* v) { delete v; }
 // nothing needed here
 #elif defined(_MSC_VER)
 // nothing needed here
+#elif defined(__redox__)
+// nothing needed here for Redox
 #else
 #  error "unsupported platform"
 #endif
@@ -905,6 +907,9 @@ static size_t MallocSizeOf(const void* aPtr) {
   return _msize((void*)aPtr);
 #elif defined(_MSC_VER)
   return _msize((void*)aPtr);
+#elif defined(__redox__)
+  // Redox doesn't have malloc_usable_size yet, return 0 as a safe fallback
+  return 0;
 #else
 #  error "unsupported platform"
 #endif

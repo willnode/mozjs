@@ -334,6 +334,68 @@ fn build_bindings(build_dir: &Path, target: BuildTarget) {
         &js_config_path(build_dir),
     ]);
 
+    // For Redox, add target-specific settings for bindgen
+    if target_env.contains("redox") {
+        // Set the target for clang
+        builder = builder
+            .clang_arg("--target=x86_64-unknown-redox")
+            .clang_arg("-D__redox__=1");
+            
+        // Define macros that are missing in Redox headers but expected by bindgen
+        builder = builder
+            .clang_arg("-D__BEGIN_DECLS=")
+            .clang_arg("-D__END_DECLS=")
+            .clang_arg("-D__UINT64_C(c)=c ## ULL")
+            // Force clang to not support C++ attributes to avoid [[noreturn]] issue
+            .clang_arg("-D__has_cpp_attribute(x)=0")
+            // Also disable __has_attribute to prevent the [[noreturn]] path
+            .clang_arg("-D__has_attribute(x)=0")
+            // Define MOZ_HAVE_NORETURN as empty since we disabled noreturn support
+            .clang_arg("-DMOZ_HAVE_NORETURN=")
+            // Fix wchar_t issues - define it before the header tries to
+            .clang_arg("-D__WCHAR_TYPE__=int")
+            .clang_arg("-D_WCHAR_T_DEFINED")
+            .clang_arg("-D_WCHAR_T");
+
+        // Enable SSE/SSE2 support
+        builder = builder
+            .clang_arg("-D__SSE__=1")
+            .clang_arg("-D__SSE2__=1");
+
+        // Add clang's builtin headers for intrinsics (emmintrin.h, etc.)
+        // These are typically in /usr/lib/llvm-*/lib/clang/*/include
+        if let Ok(clang_resource_dir) = std::process::Command::new("clang")
+            .arg("-print-resource-dir")
+            .output()
+        {
+            if clang_resource_dir.status.success() {
+                let resource_dir = String::from_utf8_lossy(&clang_resource_dir.stdout).trim().to_string();
+                builder = builder
+                    .clang_arg("-I")
+                    .clang_arg(&format!("{}/include", resource_dir));
+            }
+        }
+
+        // Add C++ standard library headers for Redox
+        let redox_toolchain = "/home/andrzej/.redoxer/x86_64-unknown-redox/toolchain";
+        builder = builder
+            // C++ standard library headers
+            .clang_arg("-I")
+            .clang_arg(&format!("{}/x86_64-unknown-redox/include/c++/13.2.0", redox_toolchain))
+            .clang_arg("-I")
+            .clang_arg(&format!("{}/x86_64-unknown-redox/include/c++/13.2.0/x86_64-unknown-redox", redox_toolchain))
+            .clang_arg("-I")
+            .clang_arg(&format!("{}/x86_64-unknown-redox/include/c++/13.2.0/backward", redox_toolchain))
+            // Redox system headers
+            .clang_arg("-I")
+            .clang_arg(&format!("{}/x86_64-unknown-redox/include", redox_toolchain));
+
+        // Use the Redox sysroot and prevent using host system headers
+        builder = builder
+            .clang_arg("-nostdinc++")
+            .clang_arg("-nostdinc");
+    }
+
     println!(
         "Generating bindings {:?} {}.",
         builder.command_line_flags(),

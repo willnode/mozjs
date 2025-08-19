@@ -15,13 +15,14 @@ CONFIGURE_FLAGS := \
 	--disable-wasm-branch-hinting\
     --wasm-no-experimental \
     --disable-wasm-multi-memory \
-    --disable-wasm-simd
+    --disable-wasm-simd \
+    --disable-optimize
 
 MAKEFLAGS += -j 32
 
-ifneq (,$(CARGO_FEATURE_JITSPEW))
-    CONFIGURE_FLAGS += --enable-jitspew
-endif
+#ifneq (,$(CARGO_FEATURE_JITSPEW))
+#    CONFIGURE_FLAGS += --enable-jitspew
+#endif
 
 ifneq (,$(CARGO_FEATURE_DEBUGMOZJS))
 	CONFIGURE_FLAGS += --enable-debug --disable-optimize --enable-gczeal
