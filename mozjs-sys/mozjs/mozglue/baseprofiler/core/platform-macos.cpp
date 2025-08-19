@@ -22,7 +22,9 @@
 #include <mach/vm_statistics.h>
 #include <sys/time.h>
 #include <sys/resource.h>
-#include <sys/syscall.h>
+#ifndef __redox__
+#  include <sys/syscall.h>
+#endif
 #include <sys/types.h>
 #include <sys/sysctl.h>
 #include <stdarg.h>

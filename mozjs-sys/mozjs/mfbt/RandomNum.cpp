@@ -36,7 +36,9 @@ extern "C" BOOLEAN NTAPI RtlGenRandom(PVOID RandomBuffer,
 
 #if defined(__linux__)
 #  include <linux/random.h>  // For GRND_NONBLOCK.
-#  include <sys/syscall.h>   // For SYS_getrandom.
+#  ifndef __redox__
+#    include <sys/syscall.h>   // For SYS_getrandom.
+#  endif
 
 // Older glibc versions don't define SYS_getrandom, so we define it here if
 // it's not available. See bug 995069.

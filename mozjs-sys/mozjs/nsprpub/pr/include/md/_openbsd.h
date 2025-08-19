@@ -6,7 +6,9 @@
 #ifndef nspr_openbsd_defs_h___
 #define nspr_openbsd_defs_h___
 
-#include <sys/syscall.h>
+#ifndef __redox__
+#  include <sys/syscall.h>
+#endif
 
 #define PR_LINKER_ARCH  "openbsd"
 #define _PR_SI_SYSNAME  "OPENBSD"

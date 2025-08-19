@@ -13,7 +13,9 @@
 // obtained with this API; see TimeDuration::Resolution;
 //
 
-#include <sys/syscall.h>
+#ifndef __redox__
+#  include <sys/syscall.h>
+#endif
 #include <time.h>
 #include <unistd.h>
 #include <string.h>

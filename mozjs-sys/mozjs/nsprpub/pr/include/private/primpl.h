@@ -39,7 +39,9 @@ typedef struct PRSegment PRSegment;
 #endif
 
 #ifdef HAVE_SYSCALL
-#include <sys/syscall.h>
+#  ifndef __redox__
+#    include <sys/syscall.h>
+#  endif
 #endif
 
 /*************************************************************************

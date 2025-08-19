@@ -586,7 +586,7 @@ static unsigned ProtectionSettingToFlags(ProtectionSetting protection) {
 #  else
   unsigned prot_flags = ProtectionSettingToFlags(protection);
   int flags = MAP_FIXED | MAP_PRIVATE | MAP_ANON;
-#    ifdef XP_OHOS
+#    if defined(XP_OHOS) && defined(MAP_EXECUTABLE)
   // Required for JIT code on HarmonyOS.
   // Since MAP_EXECUTABLE is documented to be ignored on Linux, we
   // unconditionally enable it for all OpenHarmony distributions.

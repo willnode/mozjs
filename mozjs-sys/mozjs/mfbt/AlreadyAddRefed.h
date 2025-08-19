@@ -9,7 +9,9 @@
 #ifndef AlreadyAddRefed_h
 #define AlreadyAddRefed_h
 
+#ifndef __redox__
 #include <utility>
+#endif
 
 #include "mozilla/Assertions.h"
 #include "mozilla/Attributes.h"

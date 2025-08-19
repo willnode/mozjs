@@ -11,7 +11,9 @@
 #if __FreeBSD__ >= 2
 #include <osreldate.h>  /* for __FreeBSD_version */
 #endif
-#include <sys/syscall.h>
+#ifndef __redox__
+#  include <sys/syscall.h>
+#endif
 
 #define PR_LINKER_ARCH  "freebsd"
 #define _PR_SI_SYSNAME  "FREEBSD"

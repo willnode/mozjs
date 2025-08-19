@@ -266,7 +266,9 @@ static char* getenv(const char* name) {
 // calls with 6 arguments.
 #if (defined(XP_LINUX) && !defined(__alpha__)) || \
     (defined(__FreeBSD_kernel__) && defined(__GLIBC__))
-#  include <sys/syscall.h>
+#  ifndef __redox__
+#    include <sys/syscall.h>
+#  endif
 #  if defined(SYS_mmap) || defined(SYS_mmap2)
 static inline void* _mmap(void* addr, size_t length, int prot, int flags,
                           int fd, off_t offset) {

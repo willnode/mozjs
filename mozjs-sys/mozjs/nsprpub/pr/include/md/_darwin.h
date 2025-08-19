@@ -9,7 +9,9 @@
 #include "prthread.h"
 
 #include <libkern/OSAtomic.h>
-#include <sys/syscall.h>
+#ifndef __redox__
+#  include <sys/syscall.h>
+#endif
 
 #ifdef __APPLE__
 #include <AvailabilityMacros.h>

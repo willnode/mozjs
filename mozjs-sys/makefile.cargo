@@ -9,7 +9,15 @@ CONFIGURE_FLAGS := \
 	--disable-tests \
 	--disable-export-js \
 	--disable-shared-js \
-	--build-backends=RecursiveMake
+	--build-backends=RecursiveMake \
+	--disable-jit \
+	--disable-unified-build \
+	--disable-wasm-branch-hinting\
+    --wasm-no-experimental \
+    --disable-wasm-multi-memory \
+    --disable-wasm-simd
+
+MAKEFLAGS += -j 32
 
 ifneq (,$(CARGO_FEATURE_JITSPEW))
     CONFIGURE_FLAGS += --enable-jitspew
@@ -63,7 +71,7 @@ ifneq ($(HOST),$(TARGET))
 	endif
 
 	ifeq (aarch64-unknown-linux-gnu,$(TARGET))
-	    # Reset TARGET variable because aarch64 target name used by Rust is not 
+	    # Reset TARGET variable because aarch64 target name used by Rust is not
 		# the same as the target name needed for the CXX toolchain.
 		TARGET = aarch64-linux-gnu
 	endif

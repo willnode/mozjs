@@ -137,7 +137,6 @@ sys/socket.h
 sys/stack.h
 sys/stat.h
 sys/statvfs.h
-sys/syscall.h
 sys/sysctl.h
 sys/sysmp.h
 sys/syssgi.h

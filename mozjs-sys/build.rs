@@ -125,6 +125,7 @@ fn main() {
 
 fn build_spidermonkey(build_dir: &Path) {
     let target = env::var("TARGET").unwrap();
+
     let make;
 
     #[cfg(windows)]
@@ -156,6 +157,12 @@ fn build_spidermonkey(build_dir: &Path) {
         if let Some(value) = get_cc_rs_env_os(var_base) {
             cmd.env(var_base, value);
         }
+    }
+
+    // For Redox cross-compilation, set host compilers separately
+    if target.contains("redox") {
+        cmd.env("HOST_CC", "gcc");
+        cmd.env("HOST_CXX", "g++");
     }
 
     let encoding_c_mem_include_dir = env::var("DEP_ENCODING_C_MEM_INCLUDE_DIR").unwrap();

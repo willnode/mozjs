@@ -26,10 +26,16 @@
 #  endif
 #  if defined(XP_LINUX) && !defined(ANDROID) && defined(__GLIBC__)
 #    include <dlfcn.h>
-#    include <sys/syscall.h>
+#    ifndef __redox__
+#      include <sys/syscall.h>
+#    endif
 #    include <sys/types.h>
 #    include <unistd.h>
-#    define gettid() static_cast<pid_t>(syscall(__NR_gettid))
+#    ifndef __redox__
+#      define gettid() static_cast<pid_t>(syscall(__NR_gettid))
+#    else
+#      define gettid() static_cast<pid_t>(getpid())
+#    endif
 #  endif
 #else
 #  error "Unsupported platform"
@@ -143,6 +149,8 @@ void* js::GetNativeStackBaseImpl() {
 #    elif defined(PTHREAD_NP_H) || defined(_PTHREAD_NP_H_) || defined(NETBSD)
   /* e.g. on FreeBSD 4.8 or newer, neundorf@kde.org */
   pthread_attr_get_np(thread, &sattr);
+#    elif defined(__redox__)
+  // Redox doesn't support pthread_attr_get_np yet
 #    else
   /*
    * FIXME: this function is non-portable;

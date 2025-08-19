@@ -11,7 +11,9 @@
 #  include <sys/types.h>
 #  include <sys/mman.h>
 #  include <sys/prctl.h>
-#  include <sys/syscall.h>
+#  ifndef __redox__
+#    include <sys/syscall.h>
+#  endif
 #  include <unistd.h>
 
 #  include "mozilla/Assertions.h"

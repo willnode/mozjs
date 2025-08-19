@@ -6,7 +6,9 @@
 #ifndef nspr_netbsd_defs_h___
 #define nspr_netbsd_defs_h___
 
-#include <sys/syscall.h>
+#ifndef __redox__
+#  include <sys/syscall.h>
+#endif
 #include <sys/param.h>  /* for __NetBSD_Version__ */
 
 #define PR_LINKER_ARCH  "netbsd"

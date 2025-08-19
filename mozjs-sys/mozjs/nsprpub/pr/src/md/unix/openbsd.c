@@ -7,7 +7,9 @@
 
 #include <signal.h>
 #include <poll.h>
-#include <sys/syscall.h>
+#ifndef __redox__
+#  include <sys/syscall.h>
+#endif
 
 void _MD_EarlyInit(void) {
   /*

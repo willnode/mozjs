@@ -29,6 +29,16 @@
 #include <locale>
 #include <type_traits>
 
+// Redox OS workaround: wide char functions not in std:: namespace
+#ifdef __redox__
+#include <wchar.h>
+namespace std {
+  using ::mbsrtowcs;
+  using ::wcsrtombs;
+  using ::wcslen;
+}
+#endif
+
 #include "frontend/FrontendContext.h"
 #include "js/friend/ErrorMessages.h"  // js::GetErrorMessage, JSMSG_*
 #include "util/StringBuilder.h"

@@ -97,7 +97,9 @@ BaseProfilerThreadId profiler_current_thread_id() {
 // ------------------------------------------------------- Linux
 #  elif defined(XP_LINUX)
 
-#    include <sys/syscall.h>
+#    ifndef __redox__
+#      include <sys/syscall.h>
+#    endif
 
 namespace mozilla::baseprofiler {
 

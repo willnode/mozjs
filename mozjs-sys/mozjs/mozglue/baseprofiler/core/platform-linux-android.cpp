@@ -41,7 +41,9 @@
 #include <signal.h>
 #include <sys/time.h>
 #include <sys/resource.h>
-#include <sys/syscall.h>
+#ifndef __redox__
+#  include <sys/syscall.h>
+#endif
 #include <sys/types.h>
 #include <stdlib.h>
 #include <sched.h>

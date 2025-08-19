@@ -21,7 +21,10 @@
 #include <stdio.h>
 #include <sys/mman.h>
 #include <sys/resource.h>
+#ifndef __redox__
 #include <sys/syscall.h>
+#endif
+
 #include <sys/time.h>
 #include <sys/types.h>
 #include <thread>

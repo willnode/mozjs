@@ -115,6 +115,9 @@ void ThisThread::SetName(const char* name) {
   rv = 0;
 #elif defined(__NetBSD__)
   rv = pthread_setname_np(pthread_self(), "%s", (void*)name);
+#elif defined(__redox__)
+  // Redox doesn't support pthread_setname_np yet
+  rv = 0;
 #else
   rv = pthread_setname_np(pthread_self(), name);
 #endif
@@ -132,6 +135,9 @@ void ThisThread::GetName(char* nameBuffer, size_t len) {
   rv = 0;
 #elif defined(__linux__)
   rv = prctl(PR_GET_NAME, reinterpret_cast<unsigned long>(nameBuffer));
+#elif defined(__redox__)
+  // Redox doesn't support pthread_getname_np yet
+  rv = -1;
 #endif
 
   if (rv) {

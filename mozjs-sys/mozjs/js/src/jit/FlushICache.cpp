@@ -25,11 +25,15 @@
 
 #    if LINUX_HAS_MEMBARRIER
 #      include <linux/membarrier.h>
-#      include <sys/syscall.h>
+#      ifndef __redox__
+#        include <sys/syscall.h>
+#      endif
 #      include <sys/utsname.h>
 #      include <unistd.h>
 #    elif defined(__android__)
-#      include <sys/syscall.h>
+#      ifndef __redox__
+#        include <sys/syscall.h>
+#      endif
 #      include <unistd.h>
 #    else
 #      error "Missing platform-specific declarations for membarrier syscall!"

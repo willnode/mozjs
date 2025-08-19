@@ -5,7 +5,9 @@
 
 #include <sys/types.h>
 #include <unistd.h>
-#include <sys/syscall.h>
+#ifndef __redox__
+#  include <sys/syscall.h>
+#endif
 
 #define NS_EXPORT __attribute__((visibility("default")))
 
