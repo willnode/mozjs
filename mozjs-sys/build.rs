@@ -340,7 +340,7 @@ fn build_bindings(build_dir: &Path, target: BuildTarget) {
         builder = builder
             .clang_arg("--target=x86_64-unknown-redox")
             .clang_arg("-D__redox__=1");
-            
+
         // Define macros that are missing in Redox headers but expected by bindgen
         builder = builder
             .clang_arg("-D__BEGIN_DECLS=")
@@ -476,27 +476,28 @@ fn link_bindgen_static_lib_binaries(build_dir: &Path) {
 /// Check env variable conditions to decide if we need to link pre-built archive first.
 /// And then return bool value to notify if we need to build from source instead.
 fn should_build_from_source() -> bool {
-    if env::var("TARGET").unwrap_or_default().contains("redox") {
-        println!("Building on Redox OS. Building from source directly.");
-        return true;
-    }
+    // if env::var("TARGET").unwrap_or_default().contains("redox") {
+    //     println!("Building on Redox OS. Building from source directly.");
+    //     return true;
+    // }
+    true
 
-    if env::var_os("MOZJS_FROM_SOURCE").is_some() {
-        println!("Environment variable MOZJS_FROM_SOURCE is set. Building from source directly.");
-        true
-    } else if env::var_os("MOZJS_CREATE_ARCHIVE").is_some() {
-        println!(
-            "Environment variable MOZJS_CREATE_ARCHIVE is set. Building from source directly."
-        );
-        true
-    } else if env::var_os("MOZJS_ARCHIVE").is_some() {
-        false
-    } else if env::var_os("CARGO_FEATURE_DEBUGMOZJS").is_some() {
-        println!("debug-mozjs feature is enabled. Building from source directly.");
-        true
-    } else {
-        false
-    }
+    // if env::var_os("MOZJS_FROM_SOURCE").is_some() {
+    //     println!("Environment variable MOZJS_FROM_SOURCE is set. Building from source directly.");
+    //     true
+    // } else if env::var_os("MOZJS_CREATE_ARCHIVE").is_some() {
+    //     println!(
+    //         "Environment variable MOZJS_CREATE_ARCHIVE is set. Building from source directly."
+    //     );
+    //     true
+    // } else if env::var_os("MOZJS_ARCHIVE").is_some() {
+    //     false
+    // } else if env::var_os("CARGO_FEATURE_DEBUGMOZJS").is_some() {
+    //     println!("debug-mozjs feature is enabled. Building from source directly.");
+    //     true
+    // } else {
+    //     false
+    // }
 }
 
 /// Returns the Rust version bindgen should target
