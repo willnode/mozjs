@@ -674,6 +674,7 @@ endif
 $(SOBJS):
 	$(REPORT_BUILD)
 ifneq (,$(findstring edox,$(shell echo $(OS_ARCH) | tr A-Z a-z)))
+	$(eval REDOX_AS_FLAGS := $(subst -Wa$(comma),,$(filter-out -D% -f% -g%,$(SFLAGS))))
 	@echo "Original SFLAGS for Redox: $(SFLAGS)"
 	@echo "Filtered SFLAGS for Redox (removing -D flags): $(filter-out -D%,$(SFLAGS))"
 	@echo "=== Redox assembler debug ==="
@@ -682,14 +683,14 @@ ifneq (,$(findstring edox,$(shell echo $(OS_ARCH) | tr A-Z a-z)))
 	@echo "ASOUTOPTION: $(ASOUTOPTION)"
 	@echo "Target: $@"
 	@echo "SFLAGS: $(SFLAGS)"
-	@echo "Filtered SFLAGS (removing -D/-f/-g flags, transforming -Wa,): $(patsubst -Wa$(comma)%,%,$(filter-out -D% -f% -g%,$(SFLAGS)))"
+	@echo "Filtered SFLAGS (removing -D/-f/-g flags, transforming -Wa,): $(REDOX_AS_FLAGS)"
 	@echo "notdir of source: $(notdir $<)"
 	@echo "File-specific flags: $($(notdir $<)_FLAGS)"
 	@echo "Source file: $<"
 	@echo "Relativized source: $(call relativize,$<)"
-	@echo "Full command: $(call WINEWRAP,$(AS)) $(ASOUTOPTION)$@ $(patsubst -Wa$(comma)%,%,$(filter-out -D% -f% -g%,$(SFLAGS))) $($(notdir $<)_FLAGS) -c $(call relativize,$<)"
+	@echo "Full command: $(call WINEWRAP,$(AS)) $(ASOUTOPTION)$@ $(REDOX_AS_FLAGS) $($(notdir $<)_FLAGS) -c $(call relativize,$<)"
 	@echo "=== End debug ==="
-	$(call WINEWRAP,$(AS)) $(ASOUTOPTION)$@ $(patsubst -Wa$(comma)%,%,$(filter-out -D% -f% -g%,$(SFLAGS))) $($(notdir $<)_FLAGS) -c $(call relativize,$<)
+	$(call WINEWRAP,$(AS)) $(ASOUTOPTION)$@ $(REDOX_AS_FLAGS) $($(notdir $<)_FLAGS) -c $(call relativize,$<)
 else
 	@echo "=== Non-Redox assembler call (else branch) ==="
 	@echo "AS command: $(call WINEWRAP,$(AS)) $(ASOUTOPTION)$@ $(SFLAGS) $($(notdir $<)_FLAGS) -c $(call relativize,$<)"
