@@ -618,6 +618,11 @@ ifdef ASFILES
 $(ASOBJS):
 	$(REPORT_BUILD_VERBOSE)
 	$(call BUILDSTATUS,OBJECT_FILE $@)
+	@echo "=== ASFILES assembler call (ASOBJS) ==="
+	@echo "Using ASFLAGS: $(ASFLAGS)"
+	@echo "AS_DASH_C_FLAG: $(AS_DASH_C_FLAG)"
+	@echo "Full cmd: $(call WINEWRAP,$(AS)) $(ASOUTOPTION)$@ $(ASFLAGS) $($(notdir $<)_FLAGS) $(AS_DASH_C_FLAG) $(call relativize,$<)"
+	@echo "=== End ASOBJS debug ==="
 	$(call WINEWRAP,$(AS)) $(ASOUTOPTION)$@ $(ASFLAGS) $($(notdir $<)_FLAGS) $(AS_DASH_C_FLAG) $(call relativize,$<)
 	$(call BUILDSTATUS,END_Object $@)
 endif
@@ -677,15 +682,18 @@ ifneq (,$(findstring edox,$(shell echo $(OS_ARCH) | tr A-Z a-z)))
 	@echo "ASOUTOPTION: $(ASOUTOPTION)"
 	@echo "Target: $@"
 	@echo "SFLAGS: $(SFLAGS)"
-	@echo "Filtered SFLAGS (removing -D flags): $(filter-out -D%,$(SFLAGS))"
+	@echo "Filtered SFLAGS (removing -D/-f/-g flags, transforming -Wa,): $(patsubst -Wa$(comma)%,%,$(filter-out -D% -f% -g%,$(SFLAGS)))"
 	@echo "notdir of source: $(notdir $<)"
 	@echo "File-specific flags: $($(notdir $<)_FLAGS)"
 	@echo "Source file: $<"
 	@echo "Relativized source: $(call relativize,$<)"
-	@echo "Full command: $(call WINEWRAP,$(AS)) $(ASOUTOPTION)$@ $(filter-out -D%,$(SFLAGS)) $($(notdir $<)_FLAGS) -c $(call relativize,$<)"
+	@echo "Full command: $(call WINEWRAP,$(AS)) $(ASOUTOPTION)$@ $(patsubst -Wa$(comma)%,%,$(filter-out -D% -f% -g%,$(SFLAGS))) $($(notdir $<)_FLAGS) -c $(call relativize,$<)"
 	@echo "=== End debug ==="
-	$(call WINEWRAP,$(AS)) $(ASOUTOPTION)$@ $(filter-out -D%,$(SFLAGS)) $($(notdir $<)_FLAGS) -c $(call relativize,$<)
+	$(call WINEWRAP,$(AS)) $(ASOUTOPTION)$@ $(patsubst -Wa$(comma)%,%,$(filter-out -D% -f% -g%,$(SFLAGS))) $($(notdir $<)_FLAGS) -c $(call relativize,$<)
 else
+	@echo "=== Non-Redox assembler call (else branch) ==="
+	@echo "AS command: $(call WINEWRAP,$(AS)) $(ASOUTOPTION)$@ $(SFLAGS) $($(notdir $<)_FLAGS) -c $(call relativize,$<)"
+	@echo "=== End non-Redox debug ==="
 	$(call WINEWRAP,$(AS)) $(ASOUTOPTION)$@ $(SFLAGS) $($(notdir $<)_FLAGS) -c $(call relativize,$<)
 endif
 
