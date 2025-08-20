@@ -166,6 +166,13 @@ fn build_spidermonkey(build_dir: &Path) {
     if target.contains("redox") {
         cmd.env("HOST_CC", "gcc");
         cmd.env("HOST_CXX", "g++");
+        // Use gcc as the assembler driver instead of calling as directly
+        // This ensures -Wa, flags are properly handled
+        if let Ok(cc) = env::var("TARGET_CC") {
+            cmd.env("AS", &cc);
+        } else if let Ok(cc) = env::var("CC") {
+            cmd.env("AS", &cc);
+        }
     }
 
     let encoding_c_mem_include_dir = env::var("DEP_ENCODING_C_MEM_INCLUDE_DIR").unwrap();
