@@ -671,6 +671,19 @@ $(SOBJS):
 ifneq (,$(findstring edox,$(shell echo $(OS_ARCH) | tr A-Z a-z)))
 	@echo "Original SFLAGS for Redox: $(SFLAGS)"
 	@echo "Filtered SFLAGS for Redox: $(filter-out -N,$(SFLAGS))"
+	@echo "=== Redox assembler debug ==="
+	@echo "AS: $(AS)"
+	@echo "WINEWRAP result: $(call WINEWRAP,$(AS))"
+	@echo "ASOUTOPTION: $(ASOUTOPTION)"
+	@echo "Target: $@"
+	@echo "SFLAGS: $(SFLAGS)"
+	@echo "Filtered SFLAGS: $(filter-out -N,$(SFLAGS))"
+	@echo "notdir of source: $(notdir $<)"
+	@echo "File-specific flags: $($(notdir $<)_FLAGS)"
+	@echo "Source file: $<"
+	@echo "Relativized source: $(call relativize,$<)"
+	@echo "Full command: $(call WINEWRAP,$(AS)) $(ASOUTOPTION)$@ $(filter-out -N,$(SFLAGS)) $($(notdir $<)_FLAGS) -c $(call relativize,$<)"
+	@echo "=== End debug ==="
 	$(call WINEWRAP,$(AS)) $(ASOUTOPTION)$@ $(filter-out -N,$(SFLAGS)) $($(notdir $<)_FLAGS) -c $(call relativize,$<)
 else
 	$(call WINEWRAP,$(AS)) $(ASOUTOPTION)$@ $(SFLAGS) $($(notdir $<)_FLAGS) -c $(call relativize,$<)
