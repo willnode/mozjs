@@ -11,12 +11,13 @@ CONFIGURE_FLAGS := \
 	--disable-shared-js \
 	--build-backends=RecursiveMake \
 	--disable-jit \
-	--disable-unified-build \
 	--disable-wasm-branch-hinting\
     --wasm-no-experimental \
     --disable-wasm-multi-memory \
     --disable-wasm-simd \
     --disable-optimize
+
+#--disable-unified-build \
 
 MAKEFLAGS += -j 32
 
