@@ -674,6 +674,7 @@ endif
 $(SOBJS):
 	$(REPORT_BUILD)
 ifneq (,$(findstring edox,$(shell echo $(OS_ARCH) | tr A-Z a-z)))
+	$(eval comma := ,)
 	$(eval REDOX_AS_FLAGS := $(subst -Wa$(comma),,$(filter-out -D% -f% -g%,$(SFLAGS))))
 	@echo "Original SFLAGS for Redox: $(SFLAGS)"
 	@echo "Filtered SFLAGS for Redox (removing -D flags): $(filter-out -D%,$(SFLAGS))"
