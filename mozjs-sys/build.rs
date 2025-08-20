@@ -54,6 +54,9 @@ const EXTRA_FILES: &'static [&'static str] = &["makefile.cargo"];
 const MOZTOOLS_VERSION: &str = "4.0";
 
 fn main() {
+    // Dump environment for debugging
+    dump_environment("mozjs-build-start");
+    
     // https://github.com/servo/mozjs/issues/113
     env::set_var("MOZCONFIG", "");
 
@@ -205,6 +208,13 @@ fn build_spidermonkey(build_dir: &Path) {
     }
 
     let cargo_manifest_dir = PathBuf::from(env::var_os("CARGO_MANIFEST_DIR").unwrap());
+    
+    // Dump environment before running make
+    dump_environment("mozjs-before-make");
+    println!("cargo:warning=About to run make command: {:?}", make);
+    println!("cargo:warning=Build dir: {:?}", build_dir);
+    println!("cargo:warning=Makefile: {:?}", cargo_manifest_dir.join("makefile.cargo"));
+    
     let result = cmd
         .args(&["-R", "-f"])
         .arg(cargo_manifest_dir.join("makefile.cargo"))
@@ -1238,4 +1248,69 @@ fn get_cc_rs_env_os(var_base: &str) -> Option<OsString> {
         .or_else(|| get_env(&format!("{}_{}", var_base, target_u)))
         .or_else(|| get_env(&format!("{}_{}", kind, var_base)))
         .or_else(|| get_env(var_base))
+}
+
+fn dump_environment(phase: &str) {
+    use std::io::Write as IoWrite;
+    
+    let dump_file = format!("/tmp/mozjs-env-{}-{}.txt", phase, std::process::id());
+    println!("cargo:warning=Dumping environment to: {}", dump_file);
+    
+    let mut file = match fs::File::create(&dump_file) {
+        Ok(f) => f,
+        Err(e) => {
+            println!("cargo:warning=Failed to create env dump file: {}", e);
+            return;
+        }
+    };
+    
+    // Helper macro to write to both file and stdout
+    macro_rules! dump_line {
+        ($($arg:tt)*) => {
+            let line = format!($($arg)*);
+            writeln!(file, "{}", line).ok();
+            println!("cargo:warning={}", line);
+        };
+    }
+    
+    dump_line!("=== Environment dump for mozjs build: {} ===", phase);
+    dump_line!("Timestamp: {:?}", std::time::SystemTime::now());
+    dump_line!("Process ID: {}", std::process::id());
+    dump_line!("Current dir: {:?}", env::current_dir());
+    dump_line!("\n=== All Environment Variables ===");
+    
+    let mut vars: Vec<_> = env::vars().collect();
+    vars.sort_by(|a, b| a.0.cmp(&b.0));
+    
+    for (key, value) in vars {
+        dump_line!("{}={}", key, value);
+    }
+    
+    dump_line!("\n=== Key Build Variables ===");
+    for var in ENV_VARS {
+        if let Ok(val) = env::var(var) {
+            dump_line!("{}={}", var, val);
+        } else {
+            dump_line!("{}=<not set>", var);
+        }
+    }
+    
+    for var in SM_TARGET_ENV_VARS {
+        let target = env::var("TARGET").unwrap_or_default();
+        let target_u = target.replace('-', "_");
+        
+        // Check all variations
+        for variant in &[
+            format!("{}_{}", var, target),
+            format!("{}_{}", var, target_u),
+            format!("TARGET_{}", var),
+            var.to_string(),
+        ] {
+            if let Ok(val) = env::var(&variant) {
+                dump_line!("{}={}", variant, val);
+            }
+        }
+    }
+    
+    println!("cargo:warning=Environment dumped to: {}", dump_file);
 }
