@@ -215,6 +215,27 @@ fn build_spidermonkey(build_dir: &Path) {
     println!("cargo:warning=Build dir: {:?}", build_dir);
     println!("cargo:warning=Makefile: {:?}", cargo_manifest_dir.join("makefile.cargo"));
     
+    // Fix for recursive make issues when building from cookbook/servo
+    // Reset MAKELEVEL to prevent unwanted recursive make behavior
+    if let Ok(makelevel) = env::var("MAKELEVEL") {
+        println!("cargo:warning=Detected MAKELEVEL={}, resetting to 0 to prevent recursive make issues", makelevel);
+        cmd.env("MAKELEVEL", "0");
+    }
+    
+    // Also clear/reset other MAKE-related variables that might interfere
+    if env::var_os("MAKEFLAGS").is_some() {
+        println!("cargo:warning=Clearing MAKEFLAGS to prevent inherited make options");
+        cmd.env_remove("MAKEFLAGS");
+    }
+    
+    // Remove terminal-related make variables that might cause issues
+    for var in &["MAKE_TERMERR", "MAKE_TERMOUT"] {
+        if env::var_os(var).is_some() {
+            println!("cargo:warning=Removing {} to prevent make terminal issues", var);
+            cmd.env_remove(var);
+        }
+    }
+    
     let result = cmd
         .args(&["-R", "-f"])
         .arg(cargo_manifest_dir.join("makefile.cargo"))
