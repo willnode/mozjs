@@ -668,7 +668,13 @@ endif
 
 $(SOBJS):
 	$(REPORT_BUILD)
+ifneq (,$(findstring edox,$(shell echo $(OS_ARCH) | tr A-Z a-z)))
+	@echo "Original SFLAGS for Redox: $(SFLAGS)"
+	@echo "Filtered SFLAGS for Redox: $(filter-out -N,$(SFLAGS))"
+	$(call WINEWRAP,$(AS)) $(ASOUTOPTION)$@ $(filter-out -N,$(SFLAGS)) $($(notdir $<)_FLAGS) -c $(call relativize,$<)
+else
 	$(call WINEWRAP,$(AS)) $(ASOUTOPTION)$@ $(SFLAGS) $($(notdir $<)_FLAGS) -c $(call relativize,$<)
+endif
 
 $(CPPOBJS):
 	$(REPORT_BUILD_VERBOSE)

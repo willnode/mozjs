@@ -1,85 +1,285 @@
-   Compiling unicode-ident v1.0.18
-   Compiling proc-macro2 v1.0.101
-   Compiling stable_deref_trait v1.2.0
-   Compiling libc v0.2.175
-   Compiling cfg-if v1.0.1
-   Compiling writeable v0.5.5
-   Compiling litemap v0.7.5
-   Compiling glob v0.3.3
-   Compiling icu_locid_transform_data v1.5.1
-   Compiling shlex v1.3.0
-   Compiling libm v0.2.15
-   Compiling bitflags v2.9.2
-   Compiling rustix v1.0.8
-   Compiling crc32fast v1.5.0
-   Compiling linux-raw-sys v0.9.4
-   Compiling regex-syntax v0.8.5
-   Compiling serde v1.0.219
-   Compiling minimal-lexical v0.2.1
-   Compiling memchr v2.7.5
-   Compiling icu_properties_data v1.5.1
-   Compiling either v1.15.0
-   Compiling bindgen v0.71.1
-   Compiling pkg-config v0.3.32
-   Compiling adler2 v2.0.1
-   Compiling icu_segmenter_data v1.5.1
-   Compiling strck v0.1.2
-   Compiling vcpkg v0.2.15
-   Compiling icu_calendar_data v1.5.1
-   Compiling same-file v1.0.6
-   Compiling rustc-hash v2.1.1
-   Compiling encoding_c_mem v0.2.6
-   Compiling libloading v0.8.8
-   Compiling encoding_c v0.9.8
-   Compiling lazy_static v1.5.0
-   Compiling cc v1.2.33
-   Compiling miniz_oxide v0.8.9
-   Compiling smallvec v1.15.1
-   Compiling walkdir v2.5.0
-   Compiling encoding_rs v0.8.35
-   Compiling unicode-bidi v0.3.18
-   Compiling utf8_iter v1.0.4
-   Compiling diplomat-runtime v0.8.2
-   Compiling log v0.4.27
-   Compiling strck_ident v0.1.2
-   Compiling itertools v0.13.0
-   Compiling clang-sys v1.8.1
-   Compiling flate2 v1.1.2
-   Compiling nom v7.1.3
-   Compiling quote v1.0.40
-   Compiling syn v2.0.106
-   Compiling filetime v0.2.25
-   Compiling core_maths v0.1.1
-   Compiling regex-automata v0.4.9
-   Compiling libz-sys v1.1.22
-   Compiling xattr v1.5.1
-   Compiling tar v0.4.44
-   Compiling cexpr v0.6.0
-   Compiling regex v1.11.1
-   Compiling synstructure v0.13.2
-   Compiling zerofrom-derive v0.1.6
-   Compiling yoke-derive v0.7.5
-   Compiling displaydoc v0.2.5
-   Compiling zerovec-derive v0.10.3
-   Compiling icu_provider_macros v1.5.0
-   Compiling serde_derive v1.0.219
-   Compiling calendrical_calculations v0.1.3
-   Compiling zerofrom v0.1.6
-   Compiling yoke v0.7.5
-   Compiling zerovec v0.10.4
-   Compiling tinystr v0.7.6
-   Compiling icu_collections v1.5.0
-   Compiling icu_locid v1.5.0
-   Compiling icu_provider v1.5.0
-   Compiling icu_locid_transform v1.5.0
-   Compiling icu_segmenter v1.5.0
-   Compiling icu_calendar v1.5.2
-   Compiling icu_provider_adapters v1.5.0
-   Compiling icu_properties v1.5.1
    Compiling mozjs_sys v0.137.0-3 (/home/andrzej/otherr/mozjs/mozjs-sys)
-   Compiling diplomat_core v0.8.1
-   Compiling diplomat v0.8.0
-   Compiling icu_capi v1.5.0
+warning: mozjs_sys@0.137.0-3: Dumping environment to: /tmp/mozjs-env-mozjs-build-start-874117.txt
+warning: mozjs_sys@0.137.0-3: === Environment dump for mozjs build: mozjs-build-start ===
+warning: mozjs_sys@0.137.0-3: Timestamp: SystemTime { tv_sec: 1755683497, tv_nsec: 525299347 }
+warning: mozjs_sys@0.137.0-3: Process ID: 874117
+warning: mozjs_sys@0.137.0-3: Current dir: Ok("/home/andrzej/otherr/mozjs/mozjs-sys")
+warning: mozjs_sys@0.137.0-3: 
+warning: mozjs_sys@0.137.0-3: AR_x86_64_unknown_redox=x86_64-unknown-redox-ar
+warning: mozjs_sys@0.137.0-3: CARGO=/home/andrzej/.redoxer/x86_64-unknown-redox/toolchain/bin/cargo
+warning: mozjs_sys@0.137.0-3: CARGO_CFG_FEATURE=
+warning: mozjs_sys@0.137.0-3: CARGO_CFG_FMT_DEBUG=full
+warning: mozjs_sys@0.137.0-3: CARGO_CFG_OVERFLOW_CHECKS=
+warning: mozjs_sys@0.137.0-3: CARGO_CFG_PANIC=unwind
+warning: mozjs_sys@0.137.0-3: CARGO_CFG_RELOCATION_MODEL=pic
+warning: mozjs_sys@0.137.0-3: CARGO_CFG_TARGET_ABI=
+warning: mozjs_sys@0.137.0-3: CARGO_CFG_TARGET_ARCH=x86_64
+warning: mozjs_sys@0.137.0-3: CARGO_CFG_TARGET_ENDIAN=little
+warning: mozjs_sys@0.137.0-3: CARGO_CFG_TARGET_ENV=relibc
+warning: mozjs_sys@0.137.0-3: CARGO_CFG_TARGET_FAMILY=unix
+warning: mozjs_sys@0.137.0-3: CARGO_CFG_TARGET_FEATURE=fxsr,sse,sse2,x87
+warning: mozjs_sys@0.137.0-3: CARGO_CFG_TARGET_HAS_ATOMIC=16,32,64,8,ptr
+warning: mozjs_sys@0.137.0-3: CARGO_CFG_TARGET_HAS_ATOMIC_EQUAL_ALIGNMENT=16,32,64,8,ptr
+warning: mozjs_sys@0.137.0-3: CARGO_CFG_TARGET_HAS_ATOMIC_LOAD_STORE=16,32,64,8,ptr
+warning: mozjs_sys@0.137.0-3: CARGO_CFG_TARGET_OS=redox
+warning: mozjs_sys@0.137.0-3: CARGO_CFG_TARGET_POINTER_WIDTH=64
+warning: mozjs_sys@0.137.0-3: CARGO_CFG_TARGET_THREAD_LOCAL=
+warning: mozjs_sys@0.137.0-3: CARGO_CFG_TARGET_VENDOR=unknown
+warning: mozjs_sys@0.137.0-3: CARGO_CFG_UB_CHECKS=
+warning: mozjs_sys@0.137.0-3: CARGO_CFG_UNIX=
+warning: mozjs_sys@0.137.0-3: CARGO_ENCODED_RUSTFLAGS=-Lnative=/home/andrzej/.redoxer/x86_64-unknown-redox/toolchain/x86_64-unknown-redox/lib
+warning: mozjs_sys@0.137.0-3: CARGO_MAKEFLAGS=-j --jobserver-fds=8,9 --jobserver-auth=8,9
+warning: mozjs_sys@0.137.0-3: CARGO_MANIFEST_DIR=/home/andrzej/otherr/mozjs/mozjs-sys
+warning: mozjs_sys@0.137.0-3: CARGO_MANIFEST_LINKS=mozjs
+warning: mozjs_sys@0.137.0-3: CARGO_MANIFEST_PATH=/home/andrzej/otherr/mozjs/mozjs-sys/Cargo.toml
+warning: mozjs_sys@0.137.0-3: CARGO_PKG_AUTHORS=Mozilla
+warning: mozjs_sys@0.137.0-3: CARGO_PKG_DESCRIPTION=System crate for the Mozilla SpiderMonkey JavaScript engine.
+warning: mozjs_sys@0.137.0-3: CARGO_PKG_HOMEPAGE=
+warning: mozjs_sys@0.137.0-3: CARGO_PKG_LICENSE=MPL-2.0
+warning: mozjs_sys@0.137.0-3: CARGO_PKG_LICENSE_FILE=
+warning: mozjs_sys@0.137.0-3: CARGO_PKG_NAME=mozjs_sys
+warning: mozjs_sys@0.137.0-3: CARGO_PKG_README=
+warning: mozjs_sys@0.137.0-3: CARGO_PKG_REPOSITORY=https://github.com/servo/mozjs/
+warning: mozjs_sys@0.137.0-3: CARGO_PKG_RUST_VERSION=
+warning: mozjs_sys@0.137.0-3: CARGO_PKG_VERSION=0.137.0-3
+warning: mozjs_sys@0.137.0-3: CARGO_PKG_VERSION_MAJOR=0
+warning: mozjs_sys@0.137.0-3: CARGO_PKG_VERSION_MINOR=137
+warning: mozjs_sys@0.137.0-3: CARGO_PKG_VERSION_PATCH=0
+warning: mozjs_sys@0.137.0-3: CARGO_PKG_VERSION_PRE=3
+warning: mozjs_sys@0.137.0-3: CARGO_TARGET_X86_64_UNKNOWN_REDOX_LINKER=x86_64-unknown-redox-gcc
+warning: mozjs_sys@0.137.0-3: CARGO_TARGET_X86_64_UNKNOWN_REDOX_RUNNER=redoxer exec --folder .
+warning: mozjs_sys@0.137.0-3: CC_x86_64_unknown_redox=x86_64-unknown-redox-gcc
+warning: mozjs_sys@0.137.0-3: CFLAGS_riscv64gc_unknown_redox=-march=rv64gc -mabi=lp64d
+warning: mozjs_sys@0.137.0-3: COLORTERM=truecolor
+warning: mozjs_sys@0.137.0-3: CXX_x86_64_unknown_redox=x86_64-unknown-redox-g++
+warning: mozjs_sys@0.137.0-3: DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus
+warning: mozjs_sys@0.137.0-3: DEBUG=true
+warning: mozjs_sys@0.137.0-3: DEP_ENCODING_C_INCLUDE_DIR=/home/andrzej/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/encoding_c-0.9.8/include
+warning: mozjs_sys@0.137.0-3: DEP_ENCODING_C_MEM_INCLUDE_DIR=/home/andrzej/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/encoding_c_mem-0.2.6/include
+warning: mozjs_sys@0.137.0-3: DEP_Z_INCLUDE=/home/andrzej/otherr/mozjs/target/x86_64-unknown-redox/debug/build/libz-sys-f7a02368ac2a5946/out/include
+warning: mozjs_sys@0.137.0-3: DEP_Z_ROOT=/home/andrzej/otherr/mozjs/target/x86_64-unknown-redox/debug/build/libz-sys-f7a02368ac2a5946/out
+warning: mozjs_sys@0.137.0-3: DESKTOP_AUTOSTART_ID=1036d0e0d5de2de9617556680349444500000027190005
+warning: mozjs_sys@0.137.0-3: DESKTOP_SESSION=lightdm-xsession
+warning: mozjs_sys@0.137.0-3: DISPLAY=:0
+warning: mozjs_sys@0.137.0-3: GDMSESSION=lightdm-xsession
+warning: mozjs_sys@0.137.0-3: GIO_LAUNCHED_DESKTOP_FILE=/home/andrzej/.config/autostart/tilda.desktop
+warning: mozjs_sys@0.137.0-3: GIO_LAUNCHED_DESKTOP_FILE_PID=3103
+warning: mozjs_sys@0.137.0-3: GNOME_DESKTOP_SESSION_ID=this-is-deprecated
+warning: mozjs_sys@0.137.0-3: GNU_TARGET=x86_64-unknown-redox
+warning: mozjs_sys@0.137.0-3: GOPATH=/home/andrzej/go
+warning: mozjs_sys@0.137.0-3: GOPRIVATE=gitlab.com/njskalski
+warning: mozjs_sys@0.137.0-3: GPG_AGENT_INFO=/run/user/1000/gnupg/S.gpg-agent:0:1
+warning: mozjs_sys@0.137.0-3: GTK3_MODULES=xapp-gtk3-module
+warning: mozjs_sys@0.137.0-3: GTK_MODULES=gail:atk-bridge
+warning: mozjs_sys@0.137.0-3: GUIX_LOCPATH=/home/andrzej/.guix-profile/lib/locale
+warning: mozjs_sys@0.137.0-3: HOME=/home/andrzej
+warning: mozjs_sys@0.137.0-3: HOST=x86_64-unknown-linux-gnu
+warning: mozjs_sys@0.137.0-3: LANG=en_US.UTF-8
+warning: mozjs_sys@0.137.0-3: LANGUAGE=en_US:en
+warning: mozjs_sys@0.137.0-3: LD_LIBRARY_PATH=/home/andrzej/otherr/mozjs/target/debug/deps:/home/andrzej/otherr/mozjs/target/debug:/home/andrzej/.redoxer/x86_64-unknown-redox/toolchain/lib/rustlib/x86_64-unknown-linux-gnu/lib
+warning: mozjs_sys@0.137.0-3: LOGNAME=andrzej
+warning: mozjs_sys@0.137.0-3: NUM_JOBS=32
+warning: mozjs_sys@0.137.0-3: NVM_DIR=/home/andrzej/.nvm
+warning: mozjs_sys@0.137.0-3: OPT_LEVEL=0
+warning: mozjs_sys@0.137.0-3: OUT_DIR=/home/andrzej/otherr/mozjs/target/x86_64-unknown-redox/debug/build/mozjs_sys-f718659da5b29c0a/out
+warning: mozjs_sys@0.137.0-3: PATH=/home/andrzej/.redoxer/x86_64-unknown-redox/toolchain/bin:/home/andrzej/.redoxer/x86_64-unknown-redox/toolchain/bin:/home/andrzej/.cargo/bin:/home/linuxbrew/.linuxbrew/opt/fzf/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games:/home/andrzej/.cargo/bin:/home/linuxbrew/.linuxbrew/bin:/opt/go/bin/:/home/andrzej/go/bin:/snap/bin/:/usr/lib/dart/bin:/home/andrzej/bin/spark/bin:/home/andrzej/.pub-cache/bin:/home/andrzej/bin:/usr/local/go/bin:/home/andrzej/node_modules/.bin:/home/andrzej/.local/bin:/home/andrzej/.local/share/nvm/v24.4.0/bin/
+warning: mozjs_sys@0.137.0-3: PROFILE=debug
+warning: mozjs_sys@0.137.0-3: PWD=/home/andrzej/otherr/mozjs
+warning: mozjs_sys@0.137.0-3: QT_ACCESSIBILITY=1
+warning: mozjs_sys@0.137.0-3: RUSTC=rustc
+warning: mozjs_sys@0.137.0-3: RUSTC_LINKER=x86_64-unknown-redox-gcc
+warning: mozjs_sys@0.137.0-3: RUSTDOC=rustdoc
+warning: mozjs_sys@0.137.0-3: RUSTUP_TOOLCHAIN=/home/andrzej/.redoxer/x86_64-unknown-redox/toolchain
+warning: mozjs_sys@0.137.0-3: RUST_BACKTRACE=1
+warning: mozjs_sys@0.137.0-3: SESSION_MANAGER=local/mars:@/tmp/.ICE-unix/2719,unix/mars:/tmp/.ICE-unix/2719
+warning: mozjs_sys@0.137.0-3: SHELL=/usr/bin/fish
+warning: mozjs_sys@0.137.0-3: SHLVL=1
+warning: mozjs_sys@0.137.0-3: SSH_AGENT_PID=2789
+warning: mozjs_sys@0.137.0-3: SSH_AUTH_SOCK=/run/user/1000/keyring/ssh
+warning: mozjs_sys@0.137.0-3: SSL_CERT_DIR=/usr/lib/ssl/certs
+warning: mozjs_sys@0.137.0-3: SSL_CERT_FILE=/usr/lib/ssl/cert.pem
+warning: mozjs_sys@0.137.0-3: TARGET=x86_64-unknown-redox
+warning: mozjs_sys@0.137.0-3: TERM=xterm-256color
+warning: mozjs_sys@0.137.0-3: USER=andrzej
+warning: mozjs_sys@0.137.0-3: VTE_VERSION=8001
+warning: mozjs_sys@0.137.0-3: XAUTHORITY=/home/andrzej/.Xauthority
+warning: mozjs_sys@0.137.0-3: XDG_CURRENT_DESKTOP=X-Cinnamon
+warning: mozjs_sys@0.137.0-3: XDG_DATA_DIRS=/usr/share/gnome:/home/andrzej/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share:/usr/share
+warning: mozjs_sys@0.137.0-3: XDG_GREETER_DATA_DIR=/var/lib/lightdm/data/andrzej
+warning: mozjs_sys@0.137.0-3: XDG_RUNTIME_DIR=/run/user/1000
+warning: mozjs_sys@0.137.0-3: XDG_SEAT=seat0
+warning: mozjs_sys@0.137.0-3: XDG_SEAT_PATH=/org/freedesktop/DisplayManager/Seat0
+warning: mozjs_sys@0.137.0-3: XDG_SESSION_CLASS=user
+warning: mozjs_sys@0.137.0-3: XDG_SESSION_DESKTOP=lightdm-xsession
+warning: mozjs_sys@0.137.0-3: XDG_SESSION_ID=2
+warning: mozjs_sys@0.137.0-3: XDG_SESSION_PATH=/org/freedesktop/DisplayManager/Session0
+warning: mozjs_sys@0.137.0-3: XDG_SESSION_TYPE=x11
+warning: mozjs_sys@0.137.0-3: XDG_VTNR=7
+warning: mozjs_sys@0.137.0-3: 
+warning: mozjs_sys@0.137.0-3: AR=<not set>
+warning: mozjs_sys@0.137.0-3: AS=<not set>
+warning: mozjs_sys@0.137.0-3: CC=<not set>
+warning: mozjs_sys@0.137.0-3: CFLAGS=<not set>
+warning: mozjs_sys@0.137.0-3: CLANGFLAGS=<not set>
+warning: mozjs_sys@0.137.0-3: CPP=<not set>
+warning: mozjs_sys@0.137.0-3: CPPFLAGS=<not set>
+warning: mozjs_sys@0.137.0-3: CXX=<not set>
+warning: mozjs_sys@0.137.0-3: CXXFLAGS=<not set>
+warning: mozjs_sys@0.137.0-3: MAKE=<not set>
+warning: mozjs_sys@0.137.0-3: MOZTOOLS_PATH=<not set>
+warning: mozjs_sys@0.137.0-3: MOZJS_ARCHIVE=<not set>
+warning: mozjs_sys@0.137.0-3: MOZJS_CREATE_ARCHIVE=<not set>
+warning: mozjs_sys@0.137.0-3: MOZJS_FORCE_RERUN=<not set>
+warning: mozjs_sys@0.137.0-3: MOZJS_FROM_SOURCE=<not set>
+warning: mozjs_sys@0.137.0-3: PYTHON=<not set>
+warning: mozjs_sys@0.137.0-3: STLPORT_LIBS=<not set>
+warning: mozjs_sys@0.137.0-3: AR_x86_64_unknown_redox=x86_64-unknown-redox-ar
+warning: mozjs_sys@0.137.0-3: CC_x86_64_unknown_redox=x86_64-unknown-redox-gcc
+warning: mozjs_sys@0.137.0-3: CXX_x86_64_unknown_redox=x86_64-unknown-redox-g++
+warning: mozjs_sys@0.137.0-3: Environment dumped to: /tmp/mozjs-env-mozjs-build-start-874117.txt
+warning: mozjs_sys@0.137.0-3: Dumping environment to: /tmp/mozjs-env-mozjs-before-make-874117.txt
+warning: mozjs_sys@0.137.0-3: === Environment dump for mozjs build: mozjs-before-make ===
+warning: mozjs_sys@0.137.0-3: Timestamp: SystemTime { tv_sec: 1755683497, tv_nsec: 527010446 }
+warning: mozjs_sys@0.137.0-3: Process ID: 874117
+warning: mozjs_sys@0.137.0-3: Current dir: Ok("/home/andrzej/otherr/mozjs/mozjs-sys")
+warning: mozjs_sys@0.137.0-3: 
+warning: mozjs_sys@0.137.0-3: AR_x86_64_unknown_redox=x86_64-unknown-redox-ar
+warning: mozjs_sys@0.137.0-3: CARGO=/home/andrzej/.redoxer/x86_64-unknown-redox/toolchain/bin/cargo
+warning: mozjs_sys@0.137.0-3: CARGO_CFG_FEATURE=
+warning: mozjs_sys@0.137.0-3: CARGO_CFG_FMT_DEBUG=full
+warning: mozjs_sys@0.137.0-3: CARGO_CFG_OVERFLOW_CHECKS=
+warning: mozjs_sys@0.137.0-3: CARGO_CFG_PANIC=unwind
+warning: mozjs_sys@0.137.0-3: CARGO_CFG_RELOCATION_MODEL=pic
+warning: mozjs_sys@0.137.0-3: CARGO_CFG_TARGET_ABI=
+warning: mozjs_sys@0.137.0-3: CARGO_CFG_TARGET_ARCH=x86_64
+warning: mozjs_sys@0.137.0-3: CARGO_CFG_TARGET_ENDIAN=little
+warning: mozjs_sys@0.137.0-3: CARGO_CFG_TARGET_ENV=relibc
+warning: mozjs_sys@0.137.0-3: CARGO_CFG_TARGET_FAMILY=unix
+warning: mozjs_sys@0.137.0-3: CARGO_CFG_TARGET_FEATURE=fxsr,sse,sse2,x87
+warning: mozjs_sys@0.137.0-3: CARGO_CFG_TARGET_HAS_ATOMIC=16,32,64,8,ptr
+warning: mozjs_sys@0.137.0-3: CARGO_CFG_TARGET_HAS_ATOMIC_EQUAL_ALIGNMENT=16,32,64,8,ptr
+warning: mozjs_sys@0.137.0-3: CARGO_CFG_TARGET_HAS_ATOMIC_LOAD_STORE=16,32,64,8,ptr
+warning: mozjs_sys@0.137.0-3: CARGO_CFG_TARGET_OS=redox
+warning: mozjs_sys@0.137.0-3: CARGO_CFG_TARGET_POINTER_WIDTH=64
+warning: mozjs_sys@0.137.0-3: CARGO_CFG_TARGET_THREAD_LOCAL=
+warning: mozjs_sys@0.137.0-3: CARGO_CFG_TARGET_VENDOR=unknown
+warning: mozjs_sys@0.137.0-3: CARGO_CFG_UB_CHECKS=
+warning: mozjs_sys@0.137.0-3: CARGO_CFG_UNIX=
+warning: mozjs_sys@0.137.0-3: CARGO_ENCODED_RUSTFLAGS=-Lnative=/home/andrzej/.redoxer/x86_64-unknown-redox/toolchain/x86_64-unknown-redox/lib
+warning: mozjs_sys@0.137.0-3: CARGO_MAKEFLAGS=-j --jobserver-fds=8,9 --jobserver-auth=8,9
+warning: mozjs_sys@0.137.0-3: CARGO_MANIFEST_DIR=/home/andrzej/otherr/mozjs/mozjs-sys
+warning: mozjs_sys@0.137.0-3: CARGO_MANIFEST_LINKS=mozjs
+warning: mozjs_sys@0.137.0-3: CARGO_MANIFEST_PATH=/home/andrzej/otherr/mozjs/mozjs-sys/Cargo.toml
+warning: mozjs_sys@0.137.0-3: CARGO_PKG_AUTHORS=Mozilla
+warning: mozjs_sys@0.137.0-3: CARGO_PKG_DESCRIPTION=System crate for the Mozilla SpiderMonkey JavaScript engine.
+warning: mozjs_sys@0.137.0-3: CARGO_PKG_HOMEPAGE=
+warning: mozjs_sys@0.137.0-3: CARGO_PKG_LICENSE=MPL-2.0
+warning: mozjs_sys@0.137.0-3: CARGO_PKG_LICENSE_FILE=
+warning: mozjs_sys@0.137.0-3: CARGO_PKG_NAME=mozjs_sys
+warning: mozjs_sys@0.137.0-3: CARGO_PKG_README=
+warning: mozjs_sys@0.137.0-3: CARGO_PKG_REPOSITORY=https://github.com/servo/mozjs/
+warning: mozjs_sys@0.137.0-3: CARGO_PKG_RUST_VERSION=
+warning: mozjs_sys@0.137.0-3: CARGO_PKG_VERSION=0.137.0-3
+warning: mozjs_sys@0.137.0-3: CARGO_PKG_VERSION_MAJOR=0
+warning: mozjs_sys@0.137.0-3: CARGO_PKG_VERSION_MINOR=137
+warning: mozjs_sys@0.137.0-3: CARGO_PKG_VERSION_PATCH=0
+warning: mozjs_sys@0.137.0-3: CARGO_PKG_VERSION_PRE=3
+warning: mozjs_sys@0.137.0-3: CARGO_TARGET_X86_64_UNKNOWN_REDOX_LINKER=x86_64-unknown-redox-gcc
+warning: mozjs_sys@0.137.0-3: CARGO_TARGET_X86_64_UNKNOWN_REDOX_RUNNER=redoxer exec --folder .
+warning: mozjs_sys@0.137.0-3: CC_x86_64_unknown_redox=x86_64-unknown-redox-gcc
+warning: mozjs_sys@0.137.0-3: CFLAGS_riscv64gc_unknown_redox=-march=rv64gc -mabi=lp64d
+warning: mozjs_sys@0.137.0-3: COLORTERM=truecolor
+warning: mozjs_sys@0.137.0-3: CXX_x86_64_unknown_redox=x86_64-unknown-redox-g++
+warning: mozjs_sys@0.137.0-3: DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus
+warning: mozjs_sys@0.137.0-3: DEBUG=true
+warning: mozjs_sys@0.137.0-3: DEP_ENCODING_C_INCLUDE_DIR=/home/andrzej/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/encoding_c-0.9.8/include
+warning: mozjs_sys@0.137.0-3: DEP_ENCODING_C_MEM_INCLUDE_DIR=/home/andrzej/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/encoding_c_mem-0.2.6/include
+warning: mozjs_sys@0.137.0-3: DEP_Z_INCLUDE=/home/andrzej/otherr/mozjs/target/x86_64-unknown-redox/debug/build/libz-sys-f7a02368ac2a5946/out/include
+warning: mozjs_sys@0.137.0-3: DEP_Z_ROOT=/home/andrzej/otherr/mozjs/target/x86_64-unknown-redox/debug/build/libz-sys-f7a02368ac2a5946/out
+warning: mozjs_sys@0.137.0-3: DESKTOP_AUTOSTART_ID=1036d0e0d5de2de9617556680349444500000027190005
+warning: mozjs_sys@0.137.0-3: DESKTOP_SESSION=lightdm-xsession
+warning: mozjs_sys@0.137.0-3: DISPLAY=:0
+warning: mozjs_sys@0.137.0-3: GDMSESSION=lightdm-xsession
+warning: mozjs_sys@0.137.0-3: GIO_LAUNCHED_DESKTOP_FILE=/home/andrzej/.config/autostart/tilda.desktop
+warning: mozjs_sys@0.137.0-3: GIO_LAUNCHED_DESKTOP_FILE_PID=3103
+warning: mozjs_sys@0.137.0-3: GNOME_DESKTOP_SESSION_ID=this-is-deprecated
+warning: mozjs_sys@0.137.0-3: GNU_TARGET=x86_64-unknown-redox
+warning: mozjs_sys@0.137.0-3: GOPATH=/home/andrzej/go
+warning: mozjs_sys@0.137.0-3: GOPRIVATE=gitlab.com/njskalski
+warning: mozjs_sys@0.137.0-3: GPG_AGENT_INFO=/run/user/1000/gnupg/S.gpg-agent:0:1
+warning: mozjs_sys@0.137.0-3: GTK3_MODULES=xapp-gtk3-module
+warning: mozjs_sys@0.137.0-3: GTK_MODULES=gail:atk-bridge
+warning: mozjs_sys@0.137.0-3: GUIX_LOCPATH=/home/andrzej/.guix-profile/lib/locale
+warning: mozjs_sys@0.137.0-3: HOME=/home/andrzej
+warning: mozjs_sys@0.137.0-3: HOST=x86_64-unknown-linux-gnu
+warning: mozjs_sys@0.137.0-3: LANG=en_US.UTF-8
+warning: mozjs_sys@0.137.0-3: LANGUAGE=en_US:en
+warning: mozjs_sys@0.137.0-3: LD_LIBRARY_PATH=/home/andrzej/otherr/mozjs/target/debug/deps:/home/andrzej/otherr/mozjs/target/debug:/home/andrzej/.redoxer/x86_64-unknown-redox/toolchain/lib/rustlib/x86_64-unknown-linux-gnu/lib
+warning: mozjs_sys@0.137.0-3: LOGNAME=andrzej
+warning: mozjs_sys@0.137.0-3: MOZCONFIG=
+warning: mozjs_sys@0.137.0-3: MOZ_NO_DEBUG_RTL=1
+warning: mozjs_sys@0.137.0-3: NUM_JOBS=32
+warning: mozjs_sys@0.137.0-3: NVM_DIR=/home/andrzej/.nvm
+warning: mozjs_sys@0.137.0-3: OPT_LEVEL=0
+warning: mozjs_sys@0.137.0-3: OUT_DIR=/home/andrzej/otherr/mozjs/target/x86_64-unknown-redox/debug/build/mozjs_sys-f718659da5b29c0a/out
+warning: mozjs_sys@0.137.0-3: PATH=/home/andrzej/.redoxer/x86_64-unknown-redox/toolchain/bin:/home/andrzej/.redoxer/x86_64-unknown-redox/toolchain/bin:/home/andrzej/.cargo/bin:/home/linuxbrew/.linuxbrew/opt/fzf/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games:/home/andrzej/.cargo/bin:/home/linuxbrew/.linuxbrew/bin:/opt/go/bin/:/home/andrzej/go/bin:/snap/bin/:/usr/lib/dart/bin:/home/andrzej/bin/spark/bin:/home/andrzej/.pub-cache/bin:/home/andrzej/bin:/usr/local/go/bin:/home/andrzej/node_modules/.bin:/home/andrzej/.local/bin:/home/andrzej/.local/share/nvm/v24.4.0/bin/
+warning: mozjs_sys@0.137.0-3: PROFILE=debug
+warning: mozjs_sys@0.137.0-3: PWD=/home/andrzej/otherr/mozjs
+warning: mozjs_sys@0.137.0-3: QT_ACCESSIBILITY=1
+warning: mozjs_sys@0.137.0-3: RUSTC=rustc
+warning: mozjs_sys@0.137.0-3: RUSTC_LINKER=x86_64-unknown-redox-gcc
+warning: mozjs_sys@0.137.0-3: RUSTDOC=rustdoc
+warning: mozjs_sys@0.137.0-3: RUSTUP_TOOLCHAIN=/home/andrzej/.redoxer/x86_64-unknown-redox/toolchain
+warning: mozjs_sys@0.137.0-3: RUST_BACKTRACE=1
+warning: mozjs_sys@0.137.0-3: SESSION_MANAGER=local/mars:@/tmp/.ICE-unix/2719,unix/mars:/tmp/.ICE-unix/2719
+warning: mozjs_sys@0.137.0-3: SHELL=/usr/bin/fish
+warning: mozjs_sys@0.137.0-3: SHLVL=1
+warning: mozjs_sys@0.137.0-3: SSH_AGENT_PID=2789
+warning: mozjs_sys@0.137.0-3: SSH_AUTH_SOCK=/run/user/1000/keyring/ssh
+warning: mozjs_sys@0.137.0-3: SSL_CERT_DIR=/usr/lib/ssl/certs
+warning: mozjs_sys@0.137.0-3: SSL_CERT_FILE=/usr/lib/ssl/cert.pem
+warning: mozjs_sys@0.137.0-3: TARGET=x86_64-unknown-redox
+warning: mozjs_sys@0.137.0-3: TERM=xterm-256color
+warning: mozjs_sys@0.137.0-3: USER=andrzej
+warning: mozjs_sys@0.137.0-3: VTE_VERSION=8001
+warning: mozjs_sys@0.137.0-3: XAUTHORITY=/home/andrzej/.Xauthority
+warning: mozjs_sys@0.137.0-3: XDG_CURRENT_DESKTOP=X-Cinnamon
+warning: mozjs_sys@0.137.0-3: XDG_DATA_DIRS=/usr/share/gnome:/home/andrzej/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share:/usr/share
+warning: mozjs_sys@0.137.0-3: XDG_GREETER_DATA_DIR=/var/lib/lightdm/data/andrzej
+warning: mozjs_sys@0.137.0-3: XDG_RUNTIME_DIR=/run/user/1000
+warning: mozjs_sys@0.137.0-3: XDG_SEAT=seat0
+warning: mozjs_sys@0.137.0-3: XDG_SEAT_PATH=/org/freedesktop/DisplayManager/Seat0
+warning: mozjs_sys@0.137.0-3: XDG_SESSION_CLASS=user
+warning: mozjs_sys@0.137.0-3: XDG_SESSION_DESKTOP=lightdm-xsession
+warning: mozjs_sys@0.137.0-3: XDG_SESSION_ID=2
+warning: mozjs_sys@0.137.0-3: XDG_SESSION_PATH=/org/freedesktop/DisplayManager/Session0
+warning: mozjs_sys@0.137.0-3: XDG_SESSION_TYPE=x11
+warning: mozjs_sys@0.137.0-3: XDG_VTNR=7
+warning: mozjs_sys@0.137.0-3: 
+warning: mozjs_sys@0.137.0-3: AR=<not set>
+warning: mozjs_sys@0.137.0-3: AS=<not set>
+warning: mozjs_sys@0.137.0-3: CC=<not set>
+warning: mozjs_sys@0.137.0-3: CFLAGS=<not set>
+warning: mozjs_sys@0.137.0-3: CLANGFLAGS=<not set>
+warning: mozjs_sys@0.137.0-3: CPP=<not set>
+warning: mozjs_sys@0.137.0-3: CPPFLAGS=<not set>
+warning: mozjs_sys@0.137.0-3: CXX=<not set>
+warning: mozjs_sys@0.137.0-3: CXXFLAGS=<not set>
+warning: mozjs_sys@0.137.0-3: MAKE=<not set>
+warning: mozjs_sys@0.137.0-3: MOZTOOLS_PATH=<not set>
+warning: mozjs_sys@0.137.0-3: MOZJS_ARCHIVE=<not set>
+warning: mozjs_sys@0.137.0-3: MOZJS_CREATE_ARCHIVE=<not set>
+warning: mozjs_sys@0.137.0-3: MOZJS_FORCE_RERUN=<not set>
+warning: mozjs_sys@0.137.0-3: MOZJS_FROM_SOURCE=<not set>
+warning: mozjs_sys@0.137.0-3: PYTHON=<not set>
+warning: mozjs_sys@0.137.0-3: STLPORT_LIBS=<not set>
+warning: mozjs_sys@0.137.0-3: AR_x86_64_unknown_redox=x86_64-unknown-redox-ar
+warning: mozjs_sys@0.137.0-3: CC_x86_64_unknown_redox=x86_64-unknown-redox-gcc
+warning: mozjs_sys@0.137.0-3: CXX_x86_64_unknown_redox=x86_64-unknown-redox-g++
+warning: mozjs_sys@0.137.0-3: Environment dumped to: /tmp/mozjs-env-mozjs-before-make-874117.txt
+warning: mozjs_sys@0.137.0-3: About to run make command: "gmake"
+warning: mozjs_sys@0.137.0-3: Build dir: "/home/andrzej/otherr/mozjs/target/x86_64-unknown-redox/debug/build/mozjs_sys-f718659da5b29c0a/out/build"
+warning: mozjs_sys@0.137.0-3: Makefile: "/home/andrzej/otherr/mozjs/mozjs-sys/makefile.cargo"
 warning: mozjs_sys@0.137.0-3: ./src/jsapi.cpp: In function 'void glue::JS_StackCapture_AllFrames(JS::StackCapture*)':
 warning: mozjs_sys@0.137.0-3: ./src/jsapi.cpp:88:9: warning: 'void* memcpy(void*, const void*, size_t)' writing to an object of type 'using JS::StackCapture = class mozilla::Variant<JS::AllFrames, JS::MaxFrames, JS::FirstSubsumedFrame>' {aka 'class mozilla::Variant<JS::AllFrames, JS::MaxFrames, JS::FirstSubsumedFrame>'} with no trivial copy-assignment; use copy-assignment or copy-initialization instead [-Wclass-memaccess]
 warning: mozjs_sys@0.137.0-3:    88 |   memcpy(capture, &all, sizeof(JS::StackCapture));
@@ -142,4 +342,4 @@ warning: unused import: `self`
    = note: `#[warn(unused_imports)]` on by default
 
 warning: `mozjs` (lib) generated 1 warning (run `cargo fix --lib -p mozjs` to apply 1 suggestion)
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 2m 05s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 27.14s
