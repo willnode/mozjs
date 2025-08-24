@@ -56,7 +56,7 @@ const MOZTOOLS_VERSION: &str = "4.0";
 fn main() {
     // Dump environment for debugging
     dump_environment("mozjs-build-start");
-    
+
     // https://github.com/servo/mozjs/issues/113
     env::set_var("MOZCONFIG", "");
 
@@ -173,6 +173,14 @@ fn build_spidermonkey(build_dir: &Path) {
         } else if let Ok(cc) = env::var("CC") {
             cmd.env("AS", &cc);
         }
+        // Define _WCHAR_T to prevent relibc from redefining wchar_t in C++ mode
+        // (wchar_t is a built-in type in C++)
+        let mut cxxflags = OsString::from("-D_WCHAR_T");
+        if let Some(flags) = env::var_os("CXXFLAGS") {
+            cxxflags.push(" ");
+            cxxflags.push(flags);
+        }
+        cmd.env("CXXFLAGS", cxxflags);
     }
 
     let encoding_c_mem_include_dir = env::var("DEP_ENCODING_C_MEM_INCLUDE_DIR").unwrap();
@@ -215,26 +223,26 @@ fn build_spidermonkey(build_dir: &Path) {
     }
 
     let cargo_manifest_dir = PathBuf::from(env::var_os("CARGO_MANIFEST_DIR").unwrap());
-    
+
     // Dump environment before running make
     dump_environment("mozjs-before-make");
     println!("cargo:warning=About to run make command: {:?}", make);
     println!("cargo:warning=Build dir: {:?}", build_dir);
     println!("cargo:warning=Makefile: {:?}", cargo_manifest_dir.join("makefile.cargo"));
-    
+
     // Fix for recursive make issues when building from cookbook/servo
     // Reset MAKELEVEL to prevent unwanted recursive make behavior
     if let Ok(makelevel) = env::var("MAKELEVEL") {
         println!("cargo:warning=Detected MAKELEVEL={}, resetting to 0 to prevent recursive make issues", makelevel);
         cmd.env("MAKELEVEL", "0");
     }
-    
+
     // Also clear/reset other MAKE-related variables that might interfere
     if env::var_os("MAKEFLAGS").is_some() {
         println!("cargo:warning=Clearing MAKEFLAGS to prevent inherited make options");
         cmd.env_remove("MAKEFLAGS");
     }
-    
+
     // Remove terminal-related make variables that might cause issues
     for var in &["MAKE_TERMERR", "MAKE_TERMOUT"] {
         if env::var_os(var).is_some() {
@@ -242,7 +250,7 @@ fn build_spidermonkey(build_dir: &Path) {
             cmd.env_remove(var);
         }
     }
-    
+
     let result = cmd
         .args(&["-R", "-f"])
         .arg(cargo_manifest_dir.join("makefile.cargo"))
@@ -378,6 +386,13 @@ fn build_bindings(build_dir: &Path, target: BuildTarget) {
         builder = builder
             .clang_arg("--target=x86_64-unknown-redox")
             .clang_arg("-D__redox__=1");
+
+        // Add Redox sysroot include paths for bindgen
+        if let Ok(sysroot) = env::var("COOKBOOK_SYSROOT") {
+            builder = builder
+                .clang_arg(&format!("-I{}/include", sysroot))
+                .clang_arg(&format!("-I{}/usr/include", sysroot));
+        }
 
         // Define macros that are missing in Redox headers but expected by bindgen
         builder = builder
@@ -1280,10 +1295,10 @@ fn get_cc_rs_env_os(var_base: &str) -> Option<OsString> {
 
 fn dump_environment(phase: &str) {
     use std::io::Write as IoWrite;
-    
+
     let dump_file = format!("/tmp/mozjs-env-{}-{}.txt", phase, std::process::id());
     println!("cargo:warning=Dumping environment to: {}", dump_file);
-    
+
     let mut file = match fs::File::create(&dump_file) {
         Ok(f) => f,
         Err(e) => {
@@ -1291,7 +1306,7 @@ fn dump_environment(phase: &str) {
             return;
         }
     };
-    
+
     // Helper macro to write to both file and stdout
     macro_rules! dump_line {
         ($($arg:tt)*) => {
@@ -1300,20 +1315,20 @@ fn dump_environment(phase: &str) {
             println!("cargo:warning={}", line);
         };
     }
-    
+
     dump_line!("=== Environment dump for mozjs build: {} ===", phase);
     dump_line!("Timestamp: {:?}", std::time::SystemTime::now());
     dump_line!("Process ID: {}", std::process::id());
     dump_line!("Current dir: {:?}", env::current_dir());
     dump_line!("\n=== All Environment Variables ===");
-    
+
     let mut vars: Vec<_> = env::vars().collect();
     vars.sort_by(|a, b| a.0.cmp(&b.0));
-    
+
     for (key, value) in vars {
         dump_line!("{}={}", key, value);
     }
-    
+
     dump_line!("\n=== Key Build Variables ===");
     for var in ENV_VARS {
         if let Ok(val) = env::var(var) {
@@ -1322,11 +1337,11 @@ fn dump_environment(phase: &str) {
             dump_line!("{}=<not set>", var);
         }
     }
-    
+
     for var in SM_TARGET_ENV_VARS {
         let target = env::var("TARGET").unwrap_or_default();
         let target_u = target.replace('-', "_");
-        
+
         // Check all variations
         for variant in &[
             format!("{}_{}", var, target),
@@ -1339,6 +1354,6 @@ fn dump_environment(phase: &str) {
             }
         }
     }
-    
+
     println!("cargo:warning=Environment dumped to: {}", dump_file);
 }
