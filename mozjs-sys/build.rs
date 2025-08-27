@@ -388,11 +388,19 @@ fn build_bindings(build_dir: &Path, target: BuildTarget) {
             .clang_arg("-D__redox__=1");
 
         // Add Redox sysroot include paths for bindgen
-        if let Ok(sysroot) = env::var("COOKBOOK_SYSROOT") {
-            builder = builder
-                .clang_arg(&format!("-I{}/include", sysroot))
-                .clang_arg(&format!("-I{}/usr/include", sysroot));
-        }
+        let sysroot = env::var("COOKBOOK_SYSROOT").expect("COOKBOOK_SYSROOT environment variable not set");
+        builder = builder
+            // C++ standard library headers
+            .clang_arg("-I")
+            .clang_arg(&format!("{}/include/c++/13.2.0", sysroot))
+            .clang_arg("-I")
+            .clang_arg(&format!("{}/include/c++/13.2.0/x86_64-unknown-redox", sysroot))
+            .clang_arg("-I")
+            .clang_arg(&format!("{}/include/c++/13.2.0/backward", sysroot))
+            // Redox system headers
+            .clang_arg("-I")
+            .clang_arg(&format!("{}/include", sysroot));
+
 
         // Define macros that are missing in Redox headers but expected by bindgen
         builder = builder
