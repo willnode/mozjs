@@ -15,11 +15,16 @@ CONFIGURE_FLAGS := \
     --wasm-no-experimental \
     --disable-wasm-multi-memory \
     --disable-wasm-simd \
-    --disable-optimize
+    --disable-optimize \
+    --disable-profiling
 
 #--disable-unified-build \
 
 MAKEFLAGS += -j 32
+
+# Disable unwinding and exception handling features
+CFLAGS += -fno-unwind-tables -fno-asynchronous-unwind-tables -fomit-frame-pointer
+CXXFLAGS += -fno-unwind-tables -fno-asynchronous-unwind-tables -fomit-frame-pointer -fno-exceptions -fno-rtti
 
 #ifneq (,$(CARGO_FEATURE_JITSPEW))
 #    CONFIGURE_FLAGS += --enable-jitspew
@@ -29,9 +34,10 @@ ifneq (,$(CARGO_FEATURE_DEBUGMOZJS))
 	CONFIGURE_FLAGS += --enable-debug --disable-optimize --enable-gczeal
 endif
 
-ifneq (,$(CARGO_FEATURE_PROFILEMOZJS))
-	CONFIGURE_FLAGS += --enable-profiling
-endif
+# Profiling disabled to avoid unwinding dependencies
+#ifneq (,$(CARGO_FEATURE_PROFILEMOZJS))
+#	CONFIGURE_FLAGS += --enable-profiling
+#endif
 
 ifneq (,$(CCACHE))
 	CONFIGURE_FLAGS += --with-ccache=$(CCACHE)
