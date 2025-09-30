@@ -237,12 +237,6 @@ fn build_spidermonkey(build_dir: &Path) {
         cmd.env("MAKELEVEL", "0");
     }
 
-    // Also clear/reset other MAKE-related variables that might interfere
-    if env::var_os("MAKEFLAGS").is_some() {
-        println!("cargo:warning=Clearing MAKEFLAGS to prevent inherited make options");
-        cmd.env_remove("MAKEFLAGS");
-    }
-
     // Remove terminal-related make variables that might cause issues
     for var in &["MAKE_TERMERR", "MAKE_TERMOUT"] {
         if env::var_os(var).is_some() {

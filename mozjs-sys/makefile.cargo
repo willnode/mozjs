@@ -20,8 +20,6 @@ CONFIGURE_FLAGS := \
 
 #--disable-unified-build \
 
-MAKEFLAGS += -j 32
-
 # Disable unwinding and exception handling features
 CFLAGS += -fno-unwind-tables -fno-asynchronous-unwind-tables -fomit-frame-pointer
 CXXFLAGS += -fno-unwind-tables -fno-asynchronous-unwind-tables -fomit-frame-pointer -fno-exceptions -fno-rtti
