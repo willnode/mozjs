@@ -567,6 +567,13 @@ $(foreach f,$(RS_STATICLIB_CRATE_SRC),$(eval $(call crate_src_libdep,$(f))))
 
 $(OBJS) $(HOST_OBJS) $(PROGOBJS) $(HOST_PROGOBJS): $(GLOBAL_DEPS)
 
+#FIXME: (willnode) Can't figure out why $CC inserts two sccache, I just gonna fix it here
+ifeq ($(words $(CC)), 3)
+  TARGET_CC := $(wordlist 2, 3, $(CC))
+else
+  TARGET_CC := $(CC)
+endif
+
 # Rules for building native targets must come first because of the host_ prefix
 $(HOST_COBJS):
 	$(REPORT_BUILD_VERBOSE)
@@ -583,7 +590,7 @@ $(HOST_CPPOBJS):
 $(COBJS):
 	$(REPORT_BUILD_VERBOSE)
 	$(call BUILDSTATUS,OBJECT_FILE $@)
-	$(CC) $(OUTOPTION)$@ -c $(COMPILE_CFLAGS) $($(notdir $<)_FLAGS) $<
+	$(TARGET_CC) $(OUTOPTION)$@ -c $(COMPILE_CFLAGS) $($(notdir $<)_FLAGS) $<
 	$(call BUILDSTATUS,END_Object $@)
 
 $(CWASMOBJS):
@@ -719,7 +726,7 @@ $(CMMOBJS):
 $(CMOBJS):
 	$(REPORT_BUILD_VERBOSE)
 	$(call BUILDSTATUS,OBJECT_FILE $@)
-	$(CC) -o $@ -c $(COMPILE_CFLAGS) $(COMPILE_CMFLAGS) $($(notdir $<)_FLAGS) $<
+	$(TARGET_CC) -o $@ -c $(COMPILE_CFLAGS) $(COMPILE_CMFLAGS) $($(notdir $<)_FLAGS) $<
 	$(call BUILDSTATUS,END_Object $@)
 
 $(filter %.s,$(CPPSRCS:%.cpp=%.s)): %.s: %.cpp $(call mkdir_deps,$(MDDEPDIR))
@@ -736,7 +743,7 @@ $(filter %.s,$(CPPSRCS:%.cxx=%.s)): %.s: %.cpp $(call mkdir_deps,$(MDDEPDIR))
 
 $(filter %.s,$(CSRCS:%.c=%.s)): %.s: %.c $(call mkdir_deps,$(MDDEPDIR))
 	$(REPORT_BUILD_VERBOSE)
-	$(CC) -S $(COMPILE_CFLAGS) $($(notdir $<)_FLAGS) $<
+	$(TARGET_CC) -S $(COMPILE_CFLAGS) $($(notdir $<)_FLAGS) $<
 
 ifneq (,$(filter %.i,$(MAKECMDGOALS)))
 # Call as $(call _group_srcs,extension,$(SRCS)) - this will create a list
