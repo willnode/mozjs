@@ -213,10 +213,6 @@ fn build_spidermonkey(build_dir: &Path) {
         cmd.env("MAKEFLAGS", makeflags);
     }
 
-    if let Some(cc_wrapper) = env::var_os("CC_WRAPPER") {
-        cmd.env("CCACHE", cc_wrapper);
-    }
-
     if target.contains("apple") || target.contains("freebsd") || target.contains("ohos") {
         let mut cxxflags = OsString::from("-stdlib=libc++");
         if let Some(flags) = env::var_os("CXXFLAGS") {
