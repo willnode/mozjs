@@ -4,6 +4,7 @@
 
 use bindgen::callbacks::ParseCallbacks;
 use bindgen::{CodegenConfig, Formatter, RustTarget};
+use cargo_metadata::CargoOpt;
 use std::ffi::{OsStr, OsString};
 use std::fmt::Write;
 use std::path::{Path, PathBuf};
@@ -45,6 +46,7 @@ const SM_TARGET_ENV_VARS: &'static [&'static str] = &[
     "CXXFLAGS",
     "READELF",
     "OBJCOPY",
+    "WASI_SDK_PATH",
 ];
 
 const EXTRA_FILES: &'static [&'static str] = &["makefile.cargo"];
@@ -62,6 +64,18 @@ fn main() {
 
     // https://github.com/servo/servo/issues/14759
     env::set_var("MOZ_NO_DEBUG_RTL", "1");
+
+    if let Some(path) = wasi_sdk() {
+        env::set_var(
+            "WASI_SYSROOT",
+            PathBuf::from(&path).join("share").join("wasi-sysroot"),
+        );
+        env::set_var("TARGET_CC", PathBuf::from(&path).join("bin").join("clang"));
+        env::set_var(
+            "TARGET_CXX",
+            PathBuf::from(&path).join("bin").join("clang++"),
+        );
+    }
 
     let out_dir = PathBuf::from(env::var_os("OUT_DIR").unwrap());
     let build_dir = out_dir.join("build");
@@ -126,6 +140,34 @@ fn main() {
     }
 }
 
+fn get_icu_capi_include_path() -> String {
+    // Using cargo metadata is the official recommendation from the icu4x documentation.
+    // See <https://icu4x.unicode.org/2_0/cppdoc/>.
+    // Once we update to a new release containing https://github.com/unicode-org/icu4x/pull/6887
+    // we can remove the dependency on cargo metadata.
+    let metadata = cargo_metadata::MetadataCommand::new()
+        // icu_capi is feature guarded behind the `intl` feature.
+        .features(CargoOpt::SomeFeatures(vec!["intl".into()]))
+        .exec()
+        .unwrap();
+    let packages = metadata.packages;
+    let icu_capi_info = packages
+        .iter()
+        .find(|pkg| pkg.name.contains("icu_capi"))
+        .expect("icu_capi not found");
+    let icu_cpath = &icu_capi_info.manifest_path;
+    // Include path for icu_capi 1.5:
+    let c_include_path = icu_cpath
+        .parent()
+        .expect("manifest dir?")
+        .join("bindings/c");
+    assert!(
+        c_include_path.exists(),
+        "ICU_C C include path {c_include_path} does not exist"
+    );
+    c_include_path.to_string()
+}
+
 fn build_spidermonkey(build_dir: &Path) {
     let target = env::var("TARGET").unwrap();
 
@@ -182,6 +224,9 @@ fn build_spidermonkey(build_dir: &Path) {
         }
         cmd.env("CXXFLAGS", cxxflags);
     }
+    // Tell python to not write bytecode cache files, since this will pollute
+    // the source directory.
+    cmd.env("PYTHONDONTWRITEBYTECODE", "1");
 
     let encoding_c_mem_include_dir = env::var("DEP_ENCODING_C_MEM_INCLUDE_DIR").unwrap();
     let mut cppflags = OsString::from(format!(
@@ -189,23 +234,34 @@ fn build_spidermonkey(build_dir: &Path) {
         encoding_c_mem_include_dir.replace("\\", "/")
     ));
 
-    // add zlib.pc into pkg-config's search path
-    // this is only needed when libz-sys builds zlib from source
-    if let Ok(zlib_root_dir) = env::var("DEP_Z_ROOT") {
-        let mut pkg_config_path = OsString::from(format!(
-            "{}/lib/pkgconfig",
-            zlib_root_dir.replace("\\", "/")
-        ));
-        if let Some(env_pkg_config_path) = get_cc_rs_env_os("PKG_CONFIG_PATH") {
-            pkg_config_path.push(":");
-            pkg_config_path.push(env_pkg_config_path);
-        }
-        cmd.env("PKG_CONFIG_PATH", pkg_config_path);
+    if cfg!(all(feature = "libz-rs", feature = "libz-sys")) {
+        panic!("Cannot enable both 'libz-rs' and 'libz-sys' features at the same time. Choose only one.");
+    } else if cfg!(not(any(feature = "libz-rs", feature = "libz-sys"))) {
+        panic!("Must enable one of the 'libz-rs' or 'libz-sys' features.");
     }
 
-    if let Ok(include) = env::var("DEP_Z_INCLUDE") {
-        write!(cppflags, "-I{} ", include.replace("\\", "/")).unwrap();
+    if cfg!(feature = "libz-sys") {
+        // add zlib.pc into pkg-config's search path
+        // this is only needed when libz-sys builds zlib from source
+        if let Ok(zlib_root_dir) = env::var("DEP_Z_ROOT") {
+            let mut pkg_config_path = OsString::from(format!(
+                "{}/lib/pkgconfig",
+                zlib_root_dir.replace("\\", "/")
+            ));
+            if let Some(env_pkg_config_path) = get_cc_rs_env_os("PKG_CONFIG_PATH") {
+                pkg_config_path.push(":");
+                pkg_config_path.push(env_pkg_config_path);
+            }
+            cmd.env("PKG_CONFIG_PATH", &pkg_config_path);
+            // If we are cross compiling, we have patched SM to use this env var instead of empty string
+            cmd.env("TARGET_PKG_CONFIG_PATH", pkg_config_path);
+        }
+
+        if let Ok(include) = env::var("DEP_Z_INCLUDE") {
+            write!(cppflags, "-I{} ", include.replace("\\", "/")).unwrap();
+        }
     }
+
     cppflags.push(get_cc_rs_env_os("CPPFLAGS").unwrap_or_default());
     cmd.env("CPPFLAGS", cppflags);
 
@@ -213,14 +269,22 @@ fn build_spidermonkey(build_dir: &Path) {
         cmd.env("MAKEFLAGS", makeflags);
     }
 
-    if target.contains("apple") || target.contains("freebsd") || target.contains("ohos") {
-        let mut cxxflags = OsString::from("-stdlib=libc++");
-        if let Some(flags) = env::var_os("CXXFLAGS") {
-            cxxflags.push(" ");
-            cxxflags.push(flags);
-        }
-        cmd.env("CXXFLAGS", cxxflags);
+    let mut cxxflags = vec![];
+
+    #[cfg(feature = "intl")]
+    {
+        let icu_c_include_path = get_icu_capi_include_path();
+        cxxflags.push(format!("-I{}", &icu_c_include_path.replace("\\", "/")));
     }
+
+    if target.contains("apple") || target.contains("freebsd") || target.contains("ohos") {
+        cxxflags.push(String::from("-stdlib=libc++"));
+    }
+
+    let base_cxxflags = env::var("CXXFLAGS").unwrap_or_default();
+    let mut cxxflags = cxxflags.join(" ");
+    cxxflags.push_str(&base_cxxflags);
+    cmd.env("CXXFLAGS", cxxflags);
 
     let cargo_manifest_dir = PathBuf::from(env::var_os("CARGO_MANIFEST_DIR").unwrap());
 
@@ -344,6 +408,12 @@ fn build_bindings(build_dir: &Path, target: BuildTarget) {
         .with_codegen_config(config)
         .formatter(Formatter::Rustfmt)
         .clang_args(cc_flags(true));
+
+    if env::var("TARGET").unwrap().contains("wasi") {
+        builder = builder
+            .clang_arg("--sysroot")
+            .clang_arg(env::var("WASI_SYSROOT").unwrap().to_string());
+    }
 
     if target == BuildTarget::JSGlue {
         builder = builder
@@ -517,8 +587,14 @@ fn link_static_lib_binaries(build_dir: &Path) {
         println!("cargo:rustc-link-lib=c++");
     } else if target.contains("windows") && target.contains("gnu") {
         println!("cargo:rustc-link-lib=stdc++");
-    } else if !target.contains("windows") {
+    } else if !target.contains("windows") && !target.contains("wasi") {
+        // The build works without this for WASI, and specifying it means
+        // needing to use the WASI-SDK's clang for linking, which is annoying.
         println!("cargo:rustc-link-lib=stdc++")
+    }
+
+    if target.contains("wasi") {
+        println!("cargo:rustc-link-lib=wasi-emulated-getpid");
     }
 }
 
@@ -601,6 +677,13 @@ fn cc_flags(bindgen: bool) -> Vec<&'static str> {
         if env::var_os("CARGO_FEATURE_PROFILEMOZJS").is_some() {
             flags.push("-fno-omit-frame-pointer");
         }
+
+        if target.contains("wasi") {
+            // Unconditionally target p1 for now. Even if the application
+            // targets p2, an adapter will take care of it.
+            flags.push("--target=wasm32-wasip1");
+            flags.push("-fvisibility=default");
+        }
     }
 
     flags.extend(&["-DSTATIC_JS_API", "-DRUST_BINDGEN"]);
@@ -624,6 +707,10 @@ fn cc_flags(bindgen: bool) -> Vec<&'static str> {
         flags.push("-stdlib=libc++");
     }
 
+    if target.contains("wasi") {
+        flags.push("-D_WASI_EMULATED_GETPID");
+    }
+
     flags
 }
 
@@ -642,6 +729,14 @@ fn js_config_path(build_dir: &Path) -> String {
         .join("js-confdefs.h")
         .display()
         .to_string()
+}
+
+fn wasi_sdk() -> Option<OsString> {
+    if env::var("TARGET").unwrap().contains("wasi") {
+        get_cc_rs_env_os("WASI_SDK_PATH")
+    } else {
+        None
+    }
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -852,6 +947,9 @@ impl BuildTarget {
                 // is more than bindgen can cope with.
                 "JS::Rooted",
                 // We don't need them and bindgen doesn't like them.
+                "JS::StackGCVector.*",
+                "JS::RootedVector_Vec",
+                "JS::RootedVector_Base",
                 "JS::HandleVector",
                 "JS::MutableHandleVector",
                 "JS::Rooted.*Vector",
@@ -936,7 +1034,6 @@ impl BuildTarget {
         match self {
             BuildTarget::JSApi => &[
                 "JS::EnvironmentChain",
-                "JS::StackGCVector.*",
                 "JS::PersistentRooted.*",
                 "JS::detail::CallArgsBase",
                 "js::detail::UniqueSelector.*",
@@ -954,7 +1051,6 @@ impl BuildTarget {
             ],
             BuildTarget::JSGlue => &[
                 "JS::Auto.*Impl",
-                "JS::StackGCVector.*",
                 "JS::PersistentRooted.*",
                 "JS::detail::CallArgsBase.*",
                 "js::detail::UniqueSelector.*",
@@ -976,6 +1072,7 @@ impl BuildTarget {
                 ("root", "pub type FILE = ::libc::FILE;"),
                 ("root::JS", "pub type Heap<T> = crate::jsgc::Heap<T>;"),
                 ("root::JS", "pub type Rooted<T> = crate::jsgc::Rooted<T>;"),
+                ("root::JS", "pub type StackGCVector<T, AllocPolicy> = crate::jsgc::StackGCVector<T, AllocPolicy>;"),
             ],
             BuildTarget::JSGlue => &[
                 ("root", "pub(crate) use crate::jsapi::*;"),

@@ -18,6 +18,7 @@ env:
   CARGO_INCREMENTAL: 0
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   MOZJS_CREATE_ARCHIVE: 1
+  NEW_RUST_CHECK: ${{ inputs.rust_version == 'stable' || inputs.rust_version == 'beta' }}
 
 jobs:
   mac:
@@ -35,11 +36,11 @@ jobs:
       SCCACHE_GHA_ENABLED: "true"
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13' 
       - name: Install deps
         run: |
-          # Unlink and re-link to prevent errors when github mac runner images
-          # https://github.com/actions/setup-python/issues/577
-          brew list -1 | grep python | while read formula; do brew unlink $formula; brew link --overwrite $formula; done
           brew install llvm yasm
       - uses: dtolnay/rust-toolchain@master
         id: toolchain
@@ -59,7 +60,7 @@ jobs:
           subject-path: ./target/libmozjs-${{ matrix.platform.target }}.tar.gz
 
       - name: Upload artifact
-        if: ${{ matrix.features != 'debugmozjs' }}
+        if: ${{ matrix.features != 'debugmozjs' && env.NEW_RUST_CHECK == 'false' }}
         uses: actions/upload-artifact@v4
         with:
           path: ./target/libmozjs-${{ matrix.platform.target }}.tar.gz
@@ -107,7 +108,7 @@ jobs:
           subject-path: ./target/libmozjs-x86_64-unknown-linux-gnu.tar.gz
 
       - name: Upload artifact
-        if: ${{ matrix.features != 'debugmozjs' }}
+        if: ${{ matrix.features != 'debugmozjs'  && env.NEW_RUST_CHECK == 'false' }}
         uses: actions/upload-artifact@v4
         with:
           path: ./target/libmozjs-x86_64-unknown-linux-gnu.tar.gz
@@ -166,7 +167,7 @@ jobs:
           subject-path: ./target/${{ matrix.target }}/libmozjs-x86_64-pc-windows-msvc.tar.gz
 
       - name: Upload artifact
-        if: ${{ !contains(matrix.target, 'aarch64') && matrix.features != 'debugmozjs' }}
+        if: ${{ !contains(matrix.target, 'aarch64') && matrix.features != 'debugmozjs' && env.NEW_RUST_CHECK == 'false' }}
         uses: actions/upload-artifact@v4
         with:
           path: ./target/${{ matrix.target }}/libmozjs-x86_64-pc-windows-msvc.tar.gz
@@ -189,7 +190,7 @@ jobs:
         uses: nttld/setup-ndk@v1
         id: setup-ndk
         with:
-          ndk-version: r28
+          ndk-version: r28b
       - name: Install Rust
         uses: dtolnay/rust-toolchain@master
         id: toolchain
@@ -208,6 +209,7 @@ jobs:
           subject-path: "./target/libmozjs-${{ matrix.target }}.tar.gz"
       - name: Upload artifact
         uses: actions/upload-artifact@v4
+        if: ${{ env.NEW_RUST_CHECK == 'false' }}
         with:
           path: ./target/libmozjs-${{ matrix.target }}.tar.gz
           name: libmozjs-${{ matrix.target }}.tar.gz
@@ -243,9 +245,58 @@ jobs:
           subject-path: "./target/libmozjs-${{ matrix.target }}.tar.gz"
       - name: Upload artifact
         uses: actions/upload-artifact@v4
+        if: ${{ env.NEW_RUST_CHECK == 'false' }}
         with:
           path: ./target/libmozjs-${{ matrix.target }}.tar.gz
           name: libmozjs-${{ matrix.target }}.tar.gz
+
+  wasi:
+    name: wasm32-${{ matrix.target }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        target:
+          - wasip1
+          - wasip2
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@master
+        id: toolchain
+        with:
+          toolchain: "1.85.0"
+          targets: "wasm32-${{ matrix.target }}"
+      - uses: bytecodealliance/actions/wasmtime/setup@v1
+      - name: Install WASI-SDK
+        run: |
+          cd /tmp
+          curl --retry 5 --retry-all-errors -OL https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-25/wasi-sdk-25.0-x86_64-linux.tar.gz
+          tar -xzf wasi-sdk-25.0-x86_64-linux.tar.gz
+          mv wasi-sdk-25.0-x86_64-linux wasi-sdk
+      - name: Build
+        run: |
+          cargo +${{ steps.toolchain.outputs.name }} build --target=wasm32-${{ matrix.target }}
+        env:
+          WASI_SDK_PATH: "/tmp/wasi-sdk"
+      - name: Test
+        run: |
+          export CARGO_TARGET_WASM32_WASIP1_RUNNER="wasmtime run --dir=$PWD::/cwd"
+          export CARGO_TARGET_WASM32_WASIP2_RUNNER="wasmtime run --dir=$PWD::/cwd"
+          cargo +${{ steps.toolchain.outputs.name }} test --tests --examples --target=wasm32-${{ matrix.target }}
+        env:
+          WASI_SDK_PATH: "/tmp/wasi-sdk"
+      - name: Generate artifact attestation
+        uses: actions/attest-build-provenance@v1
+        if: ${{ inputs.release }}
+        with:
+          subject-path: "./target/libmozjs-wasm32-${{ matrix.target }}.tar.gz"
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        if: ${{ env.NEW_RUST_CHECK == 'false' }}
+        with:
+          path: ./target/libmozjs-wasm32-${{ matrix.target }}.tar.gz
+          name: libmozjs-wasm32-${{ matrix.target }}.tar.gz
 
   linux-cross-compile:
     name: linux (${{ matrix.target }})
@@ -285,21 +336,21 @@ jobs:
         with:
           clang-format-version: "18"
           exclude-regex: mozjs-sys\/mozjs
-      #- name: Get mozjs
-      #  run: |
-      #    bash ./mozjs-sys/etc/get_mozjs.sh
-      #- name: Apply patch
-      #  run: |
-      #    python3 ./mozjs-sys/etc/update.py --no-commit mozjs.tar.xz
-      #    # Run `git add` here to force CRLF converted into LF
-      #    # so that we can check diff properly in next run
-      #    git add --all mozjs-sys
-      #- name: Check patch integrity
-      #  working-directory: ./mozjs-sys
-      #  # Because we've added files in previous run, we need to
-      #  # check diff with `--staged`.
-      #  run: |
-      #    git diff --staged --no-ext-diff --quiet --exit-code
+      - name: Get mozjs
+        run: |
+          bash ./mozjs-sys/etc/get_mozjs.sh
+      - name: Apply patch
+        run: |
+          python3 ./mozjs-sys/etc/update.py --no-commit mozjs.tar.xz
+          # Run `git add` here to force CRLF converted into LF
+          # so that we can check diff properly in next run
+          git add --all mozjs-sys
+      - name: Check patch integrity
+        working-directory: ./mozjs-sys
+        # Because we've added files in previous run, we need to
+        # check diff with `--staged`.
+        run: |
+          git diff --staged --no-ext-diff --exit-code
       - name: Detect need for mozjs-sys version bump
         if: ${{ github.event_name == 'pull_request' }}
         id: changes

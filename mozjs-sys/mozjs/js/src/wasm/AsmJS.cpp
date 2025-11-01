@@ -2242,7 +2242,7 @@ class MOZ_STACK_CLASS ModuleValidator : public ModuleValidatorShared {
       return nullptr;
     }
 
-    return mg.finishModule(bytecode, moduleMeta_,
+    return mg.finishModule(bytecode, *moduleMeta_,
                            /*maybeCompleteTier2Listener=*/nullptr);
   }
 };

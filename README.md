@@ -6,8 +6,8 @@ that are battle-tested in [Servo](https://servo.org/), split in two crates:
 - `mozjs-sys`:  SpiderMonkey and low-level Rust bindings to its C++ API.
 - `mozjs`: Higher-level bindings to the SpiderMonkey API.
 
-Mozjs is currently tracking SpiderMonkey on [mozilla-release](https://searchfox.org/mozilla-release/source/) branch
-(currently version 137.0).
+Mozjs is currently tracking SpiderMonkey on [mozilla-esr140](https://searchfox.org/mozilla-esr140/source/) branch
+(currently version 140.0).
 
 ## Building from Pre-built Archive
 
@@ -71,7 +71,6 @@ export LIBCLANG_PATH=/usr/lib/clang/4.0/lib
 
    - Windows 10 SDK
    - ATL
-   - MFC
   
    To install these dependencies from the command line, you can download 
    [vs_buildtools.exe](https://aka.ms/vs/17/release/vs_buildtools.exe)
@@ -79,18 +78,10 @@ export LIBCLANG_PATH=/usr/lib/clang/4.0/lib
 
    ```
    vs_BuildTools.exe^
-      --add Microsoft.Component.MSBuild^
-      --add Microsoft.VisualStudio.Component.CoreBuildTools^
       --add Microsoft.VisualStudio.Workload.MSBuildTools^
       --add Microsoft.VisualStudio.Component.Windows11SDK^
-      --add Microsoft.VisualStudio.Component.VC.CoreBuildTools^
       --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64^
-      --add Microsoft.VisualStudio.Component.VC.Redist.14.Latest^
       --add Microsoft.VisualStudio.Component.VC.ATL^
-      --add Microsoft.VisualStudio.Component.VC.ATLMFC^
-      --add Microsoft.VisualStudio.Component.VC.CoreIde^
-      --add Microsoft.VisualStudio.ComponentGroup.NativeDesktop.Core^
-      --add Microsoft.VisualStudio.Workload.VCTools
    ```
 
 4. Install [Python 3.11](https://www.python.org/downloads/windows/).
@@ -159,7 +150,11 @@ In order to upgrade to a new version of SpiderMonkey:
 
 6. Run `./mozjs/src/generate_wrappers.sh` to regenerate wrappers.
 
-7. Build and test the bindings as above, then submit a PR!
+7. Build and test the bindings as above.
+
+8. Create a new release on github with the .tar.xz that you saved earlier. Name the new tag `mozjs-source-${COMMIT}` where `${COMMIT}` is the value stored in `mozjs/etc/COMMIT`.
+
+9. Submit a PR!
 
 8. Send companion PR to servo, as SpiderMonkey bump PR will not be merged
 until it's tested against servo.

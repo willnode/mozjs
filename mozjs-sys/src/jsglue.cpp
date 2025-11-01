@@ -883,7 +883,7 @@ bool AppendToRootedObjectVector(JS::PersistentRootedObjectVector* v,
 
 void DeleteRootedObjectVector(JS::PersistentRootedObjectVector* v) { delete v; }
 
-#if defined(__linux__)
+#if defined(__linux__) || defined(__wasi__)
 #  include <malloc.h>
 #elif defined(__APPLE__)
 #  include <malloc/malloc.h>
@@ -899,7 +899,7 @@ void DeleteRootedObjectVector(JS::PersistentRootedObjectVector* v) { delete v; }
 
 // SpiderMonkey-in-Rust currently uses system malloc, not jemalloc.
 static size_t MallocSizeOf(const void* aPtr) {
-#if defined(__linux__)
+#if defined(__linux__) || defined(__wasi__)
   return malloc_usable_size((void*)aPtr);
 #elif defined(__APPLE__)
   return malloc_size((void*)aPtr);
@@ -1121,9 +1121,41 @@ void DeleteJSExternalStringCallbacks(JSExternalStringCallbacks* callbacks) {
   delete static_cast<RustJSExternalStringCallbacks*>(callbacks);
 }
 
-void DispatchableRun(JSContext* cx, JS::Dispatchable* ptr,
+struct DispatchablePointer {
+  js::UniquePtr<JS::Dispatchable> ptr;
+};
+
+typedef bool (*RustDispatchToEventLoopCallback)(void* closure,
+                                                DispatchablePointer* ptr);
+
+struct EventLoopCallbackData {
+  RustDispatchToEventLoopCallback dispatchCallback;
+  void* closure;
+};
+
+bool DispatchToEventLoop(void* closure,
+                         js::UniquePtr<JS::Dispatchable>&& dispatchable) {
+  DispatchablePointer* wrapper =
+      new DispatchablePointer{std::move(dispatchable)};
+  auto data = static_cast<EventLoopCallbackData*>(closure);
+  return data->dispatchCallback(data->closure, wrapper);
+}
+
+void SetUpEventLoopDispatch(JSContext* cx,
+                            RustDispatchToEventLoopCallback callback,
+                            void* closure) {
+  // Intentionally leaked; this data needs to live as long as the JS runtime.
+  EventLoopCallbackData* data = new EventLoopCallbackData{
+      callback,
+      closure,
+  };
+  JS::InitDispatchsToEventLoop(cx, DispatchToEventLoop, nullptr, data);
+}
+
+void DispatchableRun(JSContext* cx, DispatchablePointer* ptr,
                      JS::Dispatchable::MaybeShuttingDown mb) {
-  ptr->run(cx, mb);
+  JS::Dispatchable::Run(cx, std::move(ptr->ptr), mb);
+  delete ptr;
 }
 
 bool StreamConsumerConsumeChunk(JS::StreamConsumer* sc, const uint8_t* begin,
@@ -1176,6 +1208,26 @@ void DumpJSStack(JSContext* cx, bool showArgs, bool showLocals,
   state.restore();
 
   printf("%s\n", buf.get());
+}
+
+uint32_t StackGCVectorValueLength(
+    JS::Handle<JS::StackGCVector<JS::Value>> vec) {
+  return vec.length();
+}
+
+uint32_t StackGCVectorStringLength(
+    JS::Handle<JS::StackGCVector<JSString*>> vec) {
+  return vec.length();
+}
+
+const JS::Value* StackGCVectorValueAtIndex(
+    JS::Handle<JS::StackGCVector<JS::Value>> vec, uint32_t index) {
+  return vec.begin() + index;
+}
+
+JSString* const* StackGCVectorStringAtIndex(
+    JS::Handle<JS::StackGCVector<JSString*>> vec, uint32_t index) {
+  return vec.begin() + index;
 }
 
 }  // extern "C"
