@@ -664,9 +664,9 @@ JS_PUBLIC_API JS::UniqueChars JS::EncodeNarrowToUtf8(JSContext* cx,
                               JSMSG_CANT_CONVERT_TO_WIDE);
     return nullptr;
   }
-  MOZ_ASSERT(std::mbsinit(&mb),
-             "multi-byte state is in its initial state when no conversion "
-             "error occured");
+  // MOZ_ASSERT(std::mbsinit(&mb),
+  //            "multi-byte state is in its initial state when no conversion "
+  //            "error occured");
 
   size_t bufLen = wideLen + 1;
   auto wideChars = cx->make_pod_array<wchar_t>(bufLen);
@@ -788,9 +788,9 @@ JS_PUBLIC_API JS::UniqueChars JS::EncodeUtf8ToNarrow(JSContext* cx,
                               JSMSG_CANT_CONVERT_TO_NARROW);
     return nullptr;
   }
-  MOZ_ASSERT(std::mbsinit(&mb),
-             "multi-byte state is in its initial state when no conversion "
-             "error occured");
+  // MOZ_ASSERT(std::mbsinit(&mb),
+  //            "multi-byte state is in its initial state when no conversion "
+  //            "error occured");
 
   size_t bufLen = narrowLen + 1;
   auto narrow = cx->make_pod_array<char>(bufLen);

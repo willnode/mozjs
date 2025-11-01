@@ -741,6 +741,10 @@ void _MD_solaris_map_sendfile_error(int err) {
 }
 #endif /* SOLARIS */
 
+#ifdef REDOX
+void _MD_redox_map_sendfile_error(int err) { _MD_unix_map_default_error(err); }
+#endif /* REDOX */
+
 #ifdef LINUX
 void _MD_linux_map_sendfile_error(int err) { _MD_unix_map_default_error(err); }
 #endif /* LINUX */

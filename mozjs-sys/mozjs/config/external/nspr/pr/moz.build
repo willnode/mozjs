@@ -72,14 +72,13 @@ elif CONFIG["OS_TARGET"] == "SunOS":
         ASFLAGS += ["-x", "assembler-with-cpp", "-D_ASM"]
         SOURCES += ["/nsprpub/pr/src/md/unix/os_SunOS_sparcv9.s"]
 elif CONFIG["OS_TARGET"] == "Redox":
-    # Treat Redox similar to Linux for x86_64
-    DEFINES["LINUX"] = True
-    DEFINES["HAVE_FCNTL_FILE_LOCKING"] = True
-    DEFINES["HAVE_POINTER_LOCALTIME_R"] = True
+    DEFINES["REDOX"] = True
+    DEFINES["HAVE_FCNTL_FILE_LOCKING"] = False
+    DEFINES["HAVE_POINTER_LOCALTIME_R"] = False
     DEFINES["_GNU_SOURCE"] = True
-    SOURCES += ["/nsprpub/pr/src/md/unix/linux.c"]
+    SOURCES += ["/nsprpub/pr/src/md/unix/redox.c"]
     if CONFIG["TARGET_CPU"] == "x86_64":
-        SOURCES += ["/nsprpub/pr/src/md/unix/os_Linux_x86_64.s"]
+        SOURCES += ["/nsprpub/pr/src/md/unix/os_Redox_x86_64.s"]
 
 elif CONFIG["OS_TARGET"] == "WINNT":
     OS_LIBS += [

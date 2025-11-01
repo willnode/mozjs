@@ -426,7 +426,11 @@ void InitMemorySubsystem() {
 
     // Decommit is supported if the system page size is the size as the
     // compile time constant and has not been disabled.
+#ifdef __redox__
+    decommitEnabled = false;
+#else
     decommitEnabled = pageSize == PageSize && !disableDecommitRequested;
+#endif
 
 #ifdef JS_64BIT
 #  ifdef XP_WIN
@@ -961,7 +965,7 @@ size_t GetPageFaultCount() {
     return 0;
   }
   return pmc.PageFaultCount;
-#elif defined(__wasi__)
+#elif defined(__wasi__) || defined(__redox__)
   return 0;
 #else
   struct rusage usage;
@@ -1122,7 +1126,7 @@ static inline void ProtectMemory(void* region, size_t length, PageAccess prot) {
   DWORD oldProtect;
   MOZ_RELEASE_ASSERT(VirtualProtect(region, length, DWORD(prot), &oldProtect) !=
                      0);
-#elif defined(__wasi__)
+#elif defined(__wasi__) || defined(__redox__)
   /* nothing */
 #else
   MOZ_RELEASE_ASSERT(mprotect(region, length, int(prot)) == 0);

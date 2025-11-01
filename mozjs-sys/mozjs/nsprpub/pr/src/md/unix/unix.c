@@ -36,7 +36,7 @@
 #if defined(HAVE_SOCKLEN_T) || (defined(__GLIBC__) && __GLIBC__ >= 2)
 #  define _PRSockLen_t socklen_t
 #elif defined(HPUX) || defined(SOLARIS) || defined(AIX4_1) || \
-    defined(LINUX) || defined(DARWIN) || defined(QNX)
+    defined(LINUX) || defined(DARWIN) || defined(QNX)|| defined(REDOX)
 #  define _PRSockLen_t int
 #elif (defined(AIX) && !defined(AIX4_1)) || defined(FREEBSD) || \
     defined(NETBSD) || defined(OPENBSD)
