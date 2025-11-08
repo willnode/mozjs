@@ -688,7 +688,7 @@ fn cc_flags(bindgen: bool) -> Vec<&'static str> {
 
     flags.extend(&["-DSTATIC_JS_API", "-DRUST_BINDGEN"]);
     if env::var_os("CARGO_FEATURE_DEBUGMOZJS").is_some() {
-        flags.extend(&["-DJS_GC_ZEAL", "-DDEBUG", "-DJS_DEBUG"]);
+        flags.extend(&["-DDEBUG", "-DJS_DEBUG"]); // "-DJS_GC_ZEAL" buggy on redox
 
         if !bindgen {
             if target.contains("windows") {
