@@ -172,7 +172,7 @@ PRStatus PR_CALLBACK _PR_SocketGetSocketOption(PRFileDesc* fd,
 #    endif
         length = sizeof(value);
         rv = _PR_MD_GETSOCKOPT(fd, level, name, (char*)&value, &length);
-#    if defined(WIN32) || defined(DARWIN)
+#    if defined(WIN32) || defined(DARWIN) || defined(REDOX)
         data->value.dont_fragment = value;
 #    else
         data->value.dont_fragment = (value == IP_PMTUDISC_DO) ? 1 : 0;
@@ -295,14 +295,14 @@ PRStatus PR_CALLBACK _PR_SocketSetSocketOption(PRFileDesc* fd,
       }
       case PR_SockOpt_DontFrag: {
 #  if !defined(WIN32) && !defined(DARWIN) && !defined(LINUX) && \
-      !defined(ANDROID) && !defined(REDOX)
+      !defined(ANDROID)
         PR_SetError(PR_OPERATION_NOT_SUPPORTED_ERROR, 0);
         rv = PR_FAILURE;
 #  else
 #    if defined(WIN32) /* Winsock */
         DWORD value;
         value = (data->value.dont_fragment) ? 1 : 0;
-#    elif defined(LINUX) || defined(ANDROID) || defined(REDOX)
+#    elif defined(LINUX) || defined(ANDROID)
         PRIntn value;
         value = (data->value.dont_fragment) ? IP_PMTUDISC_DO : IP_PMTUDISC_DONT;
 #    elif defined(DARWIN)

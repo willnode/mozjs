@@ -7900,6 +7900,18 @@ printf "%s\n" "$as_me: WARNING: Unknown version of the Microsoft (R) Manifest To
     PR_MD_CSRCS=qnx.c
     ;;
 
+*-redox*)
+    printf "%s\n" "#define XP_UNIX 1" >>confdefs.h
+
+    printf "%s\n" "#define REDOX 1" >>confdefs.h
+
+    printf "%s\n" "#define _PR_NEED_H_ERRNO 1" >>confdefs.h
+
+    USE_NSPR_THREADS=1
+    MDCPUCFG_H=_redox.cfg
+    PR_MD_CSRCS=redox.c
+    ;;
+
 *-riscos*)
     printf "%s\n" "#define XP_UNIX 1" >>confdefs.h
 
@@ -8760,7 +8772,7 @@ printf %s "checking whether ${CC-cc} accepts -pthread... " >&6; }
 	if test -z "`egrep -i '(unrecognize|unknown)' conftest.out | grep pthread`" && test -z "`egrep -i '(error|incorrect)' conftest.out`" ; then
 	    ac_cv_have_dash_pthread=yes
 		case "$target_os" in
-	    freebsd*)
+	    freebsd| redox*)
 # Freebsd doesn't use -pthread for compiles, it uses them for linking
             ;;
 	    *)

@@ -45,8 +45,6 @@
 #define HAVE_DLL
 #define USE_DLFCN
 
-#define _PR_HAVE_SOCKADDR_LEN
-
 #if defined(__i686__)
 #define _PR_HAVE_ATOMIC_OPS
 #define _MD_INIT_ATOMIC()
@@ -97,8 +95,6 @@ extern PRInt32 _PR_x86_64_AtomicSet(PRInt32 *val, PRInt32 newval);
 #define _PR_HAVE_GETHOSTBYNAME2
 #define _PR_HAVE_GETADDRINFO
 #define _PR_INET6_PROBE
-#define _PR_HAVE_SYSV_SEMAPHORES
-#define PR_HAVE_SYSV_NAMED_SHARED_MEMORY
 #define _PR_HAVE_GETHOST_R
 #define _PR_HAVE_GETHOST_R_INT
 

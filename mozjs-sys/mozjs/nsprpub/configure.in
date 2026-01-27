@@ -1913,6 +1913,15 @@ tools are selected during the Xcode/Developer Tools installation.])
     PR_MD_CSRCS=qnx.c
     ;;
 
+*-redox*)
+    AC_DEFINE(XP_UNIX)
+    AC_DEFINE(REDOX)
+    AC_DEFINE(_PR_NEED_H_ERRNO)
+    USE_NSPR_THREADS=1
+    MDCPUCFG_H=_redox.cfg
+    PR_MD_CSRCS=redox.c
+    ;;
+
 *-riscos*)
     AC_DEFINE(XP_UNIX)
     AC_DEFINE(RISCOS)
@@ -2199,6 +2208,9 @@ esac
 
 case "$target_os" in
 darwin*)
+    _HAVE_PTHREADS=1
+    ;;
+redox*)
     _HAVE_PTHREADS=1
     ;;
 *)

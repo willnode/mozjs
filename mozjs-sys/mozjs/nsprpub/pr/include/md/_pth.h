@@ -66,7 +66,7 @@
     || defined(HPUX) || defined(FREEBSD) \
     || defined(NETBSD) || defined(OPENBSD) \
     || defined(NTO) || defined(DARWIN) \
-    || defined(RISCOS)
+    || defined(REDOX) || defined(RISCOS)
 #define _PT_PTHREAD_INVALIDATE_THR_HANDLE(t)  (t) = 0
 #define _PT_PTHREAD_THR_HANDLE_IS_INVALID(t)  (t) == 0
 #define _PT_PTHREAD_COPY_THR_HANDLE(st, dt)   (dt) = (st)
@@ -134,6 +134,7 @@
 #define PT_PRIO_MAX            31
 #elif defined(NETBSD) \
     || defined(DARWIN) \
+    || defined(REDOX) \
     || defined(RISCOS) /* XXX */
 #define PT_PRIO_MIN            0
 #define PT_PRIO_MAX            126
@@ -153,7 +154,7 @@ extern int (*_PT_aix_yield_fcn)();
     || defined(LINUX) || defined(__GNU__) || defined(__GLIBC__) \
     || defined(FREEBSD) || defined(NETBSD) || defined(OPENBSD) \
     || defined(NTO) || defined(DARWIN) \
-    || defined(RISCOS)
+    || defined(REDOX) || defined(RISCOS)
 #define _PT_PTHREAD_YIELD()             sched_yield()
 #else
 #error "Need to define _PT_PTHREAD_YIELD for this platform"
