@@ -7910,6 +7910,16 @@ printf "%s\n" "$as_me: WARNING: Unknown version of the Microsoft (R) Manifest To
     USE_NSPR_THREADS=1
     MDCPUCFG_H=_redox.cfg
     PR_MD_CSRCS=redox.c
+    case "${target_cpu}" in
+    x86_64)
+      PR_MD_ASFILES=os_Redox_x86_64.s
+      CPU_ARCH=x86_64
+      ;;
+    aarch64)
+	    printf "%s\n" "#define _ARM64_ 1" >>confdefs.h
+      CPU_ARCH=aarch64
+	    ;;
+    esac
     ;;
 
 *-riscos*)

@@ -95,8 +95,8 @@ extern PRInt32 _PR_x86_64_AtomicSet(PRInt32 *val, PRInt32 newval);
 #define _PR_HAVE_GETHOSTBYNAME2
 #define _PR_HAVE_GETADDRINFO
 #define _PR_INET6_PROBE
-#define _PR_HAVE_GETHOST_R
-#define _PR_HAVE_GETHOST_R_INT
+
+#define gethostbyname2(name, af) gethostbyname(name)
 
 #ifdef _PR_PTHREADS
 
