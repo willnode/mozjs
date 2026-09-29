@@ -29,6 +29,7 @@ SUPPORTED_TARGETS = {
     "aarch64-pc-windows-msvc": ("Windows", "ARM64"),
     "x86_64-apple-darwin": ("Darwin", "x86_64"),
     "aarch64-apple-darwin": ("Darwin", "arm64"),
+    "x86_64-unknown-redox": ("Redox", "x86_64"),
 }
 
 

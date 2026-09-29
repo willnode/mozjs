@@ -212,6 +212,6 @@ maybe-configure:
 	  HOST_CC="$(HOST_CC)" \
 	  HOST_CXX="$(HOST_CXX)" \
 	  WASI_SYSROOT="$(WASI_SYSROOT)" \
-	  AS="$(AS)" AR="$(AR)" \
+	  AS="$(CC) -c" AR="$(AR)" \
 	  $(JSSRC)/configure $(strip $(CONFIGURE_FLAGS)) || (cat config.log && exit 1) ; \
 	fi

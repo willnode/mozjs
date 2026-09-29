@@ -392,7 +392,8 @@ fn build_bindings(build_dir: &Path, target: BuildTarget) {
         // <https://learn.microsoft.com/en-us/cpp/build/reference/tc-tp-tc-tp-specify-source-file-type?view=msvc-170>
         builder
     } else {
-        builder.clang_args(["-x", "c++"])
+        // redox: libcxx is not supported
+        builder.clang_args(["-x", "c++"]).clang_arg("-stdlib=libstdc++")
     };
 
     let compiler = cc_rs_builder.get_compiler();
@@ -608,7 +609,7 @@ fn get_common_cc(build_dir: &Path, target: BuildTarget) -> cc::Build {
     builder.define("STATIC_JS_API", None);
     if env::var_os("CARGO_FEATURE_DEBUGMOZJS").is_some() {
         builder
-            .define("JS_GC_ZEAL", None)
+            // .define("JS_GC_ZEAL", None) // buggy on redox
             .define("DEBUG", None)
             .define("JS_DEBUG", None);
 
