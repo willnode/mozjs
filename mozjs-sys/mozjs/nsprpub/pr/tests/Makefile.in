@@ -24,7 +24,6 @@ CSRCS =             \
 	acceptreademu.c	\
 	addrstr.c		\
 	affinity.c		\
-	alarm.c			\
 	anonfm.c		\
 	append.c		\
 	atomic.c		\
@@ -37,7 +36,6 @@ CSRCS =             \
 	concur.c	    \
 	cvar.c			\
 	cvar2.c			\
-	dceemu.c		\
 	dlltest.c		\
 	dtoa.c			\
 	env.c			\
@@ -45,7 +43,6 @@ CSRCS =             \
 	errset.c		\
 	exit.c  		\
 	fdcach.c		\
-	fileio.c		\
 	foreign.c	    \
 	forktest.c	    \
 	formattm.c	    \
@@ -56,7 +53,6 @@ CSRCS =             \
 	i2l.c		    \
 	initclk.c		\
 	inrval.c		\
-	instrumt.c      \
 	intrio.c        \
 	intrupt.c       \
 	io_timeout.c    \
@@ -78,16 +74,13 @@ CSRCS =             \
 	makedir.c		\
 	mbcs.c			\
 	multiacc.c		\
-	multiwait.c		\
 	many_cv.c		\
 	monref.c		\
 	nameshm1.c      \
 	nbconn.c		\
 	nblayer.c		\
-	nonblock.c		\
 	ntioto.c        \
 	ntoh.c			\
-	obsints.c		\
 	op_2long.c      \
 	op_excl.c		\
 	op_filnf.c		\
@@ -107,7 +100,7 @@ CSRCS =             \
 	poll_er.c		\
 	poll_nm.c		\
 	poll_to.c		\
-	pollable.c		\
+	prefloop.c		\
 	prfdbl.c		\
 	prftest.c		\
 	prftest1.c		\
@@ -126,17 +119,7 @@ CSRCS =             \
 	rwlockrank.c    \
 	rwlocktest.c    \
 	sel_spd.c  		\
-	selct_er.c	    \
-	selct_nm.c	    \
-	selct_to.c	    \
-	select2.c  		\
 	selintr.c  		\
-	sem.c 	  		\
-	sema.c 	  		\
-	semaerr.c 		\
-	semaerr1.c 		\
-	semaping.c 		\
-	semapong.c 		\
 	sendzlf.c 		\
 	server_test.c	\
 	servr_kk.c		\
@@ -160,8 +143,6 @@ CSRCS =             \
 	system.c		\
 	testbit.c    	\
 	testfile.c    	\
-	thrpool_server.c \
-	thrpool_client.c \
 	threads.c 	  	\
 	thruput.c 	  	\
 	timemac.c		\
@@ -248,9 +229,6 @@ ifeq ($(OS_ARCH), SunOS)
     ifdef NS_USE_GCC
         LDOPTS += -Xlinker -R -Xlinker $(ABSOLUTE_LIB_DIR)
     else
-        ifeq ($(USE_CPLUS), 1)
-            CC = CC
-        endif
         LDOPTS += -R $(ABSOLUTE_LIB_DIR)
     endif
 
@@ -311,7 +289,7 @@ LIBPTHREAD = -lpthread
 ifeq ($(OS_ARCH),AIX)
 LIBPTHREAD = -lpthreads
 endif
-ifeq (,$(filter-out FreeBSD OpenBSD BSD_OS QNX Darwin OpenUNIX,$(OS_ARCH)))
+ifeq (,$(filter-out FreeBSD OpenBSD BSD_OS QNX Darwin OpenUNIX Redox,$(OS_ARCH)))
 LIBPTHREAD =
 endif
 endif
@@ -370,11 +348,12 @@ ifdef MT
 	fi
 endif
 else
-	$(PURE) $(CC) $(XCFLAGS) $< $(LDOPTS) $(LIBPLC) $(LIBNSPR) $(EXTRA_LIBS) -o $@
+	$(PURE) $(CC) $(XCFLAGS) $(LDFLAGS) $< $(LDOPTS) $(LIBPLC) $(LIBNSPR) $(EXTRA_LIBS) -o $@
 endif # WINNT
 endif # AIX_PRE_4_2
 
 export:: $(TARGETS)
+all:: $(TARGETS) # GNU make 3.81 -j can skip export:: $(TARGETS) after the dll sub-make.
 clean::
 	rm -f $(TARGETS) runtests
 
@@ -383,23 +362,23 @@ clean::
 ifeq ($(OS_ARCH),SunOS)
 ifeq ($(USE_IPV6),1)
 $(OBJDIR)/gethost: $(OBJDIR)/gethost.o
-	$(PURE) $(CC) $(XCFLAGS) $< $(LDOPTS) $(LIBPLC) $(LIBNSPR) -lsocket $(EXTRA_LIBS) -o $@
+	$(PURE) $(CC) $(XCFLAGS) $(LDFLAGS) $< $(LDOPTS) $(LIBPLC) $(LIBNSPR) -lsocket $(EXTRA_LIBS) -o $@
 endif
 $(OBJDIR)/prpoll: $(OBJDIR)/prpoll.o
-	$(PURE) $(CC) $(XCFLAGS) $< $(LDOPTS) $(LIBPLC) $(LIBNSPR) -lsocket $(EXTRA_LIBS) -o $@
+	$(PURE) $(CC) $(XCFLAGS) $(LDFLAGS) $< $(LDOPTS) $(LIBPLC) $(LIBNSPR) -lsocket $(EXTRA_LIBS) -o $@
 endif
 
 ifeq ($(USE_PTHREADS), 1)
 $(OBJDIR)/attach: $(OBJDIR)/attach.o
-	$(PURE) $(CC) $(XCFLAGS) $< $(LDOPTS) $(LIBPLC) $(LIBNSPR) $(LIBPTHREAD) $(EXTRA_LIBS) -o $@
+	$(PURE) $(CC) $(XCFLAGS) $(LDFLAGS) $< $(LDOPTS) $(LIBPLC) $(LIBNSPR) $(LIBPTHREAD) $(EXTRA_LIBS) -o $@
 $(OBJDIR)/foreign: $(OBJDIR)/foreign.o
-	$(PURE) $(CC) $(XCFLAGS) $< $(LDOPTS) $(LIBPLC) $(LIBNSPR) $(LIBPTHREAD) $(EXTRA_LIBS) -o $@
+	$(PURE) $(CC) $(XCFLAGS) $(LDFLAGS) $< $(LDOPTS) $(LIBPLC) $(LIBNSPR) $(LIBPTHREAD) $(EXTRA_LIBS) -o $@
 $(OBJDIR)/provider: $(OBJDIR)/provider.o
-	$(PURE) $(CC) $(XCFLAGS) $< $(LDOPTS) $(LIBPLC) $(LIBNSPR) $(LIBPTHREAD) $(EXTRA_LIBS) -o $@
+	$(PURE) $(CC) $(XCFLAGS) $(LDFLAGS) $< $(LDOPTS) $(LIBPLC) $(LIBNSPR) $(LIBPTHREAD) $(EXTRA_LIBS) -o $@
 $(OBJDIR)/socket: $(OBJDIR)/socket.o
-	$(PURE) $(CC) $(XCFLAGS) $< $(LDOPTS) $(LIBPLC) $(LIBNSPR) $(LIBPTHREAD) $(EXTRA_LIBS) -o $@
+	$(PURE) $(CC) $(XCFLAGS) $(LDFLAGS) $< $(LDOPTS) $(LIBPLC) $(LIBNSPR) $(LIBPTHREAD) $(EXTRA_LIBS) -o $@
 $(OBJDIR)/testfile: $(OBJDIR)/testfile.o
-	$(PURE) $(CC) $(XCFLAGS) $< $(LDOPTS) $(LIBPLC) $(LIBNSPR) $(LIBPTHREAD) $(EXTRA_LIBS) -o $@
+	$(PURE) $(CC) $(XCFLAGS) $(LDFLAGS) $< $(LDOPTS) $(LIBPLC) $(LIBNSPR) $(LIBPTHREAD) $(EXTRA_LIBS) -o $@
 endif
 
 #

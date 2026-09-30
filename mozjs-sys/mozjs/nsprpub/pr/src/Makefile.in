@@ -24,10 +24,6 @@ ifeq ($(USE_BTHREADS), 1)
 	DIRS += bthreads
 endif
 
-ifeq ($(USE_CPLUS), 1)
-	DIRS += cplus
-endif
-
 #
 # Define platform-dependent OS_LIBS
 #
@@ -148,6 +144,10 @@ ifeq ($(OS_TARGET),Android)
 OS_LIBS		+= -llog
 endif
 
+ifeq ($(OS_TARGET),redox)
+OS_LIBS		=
+endif
+
 EXTRA_LIBS += $(OS_LIBS)
 
 #
@@ -157,14 +157,12 @@ EXTRA_LIBS += $(OS_LIBS)
 OBJS = \
     $(OBJDIR)/prvrsion.$(OBJ_SUFFIX) \
     io/$(OBJDIR)/prfdcach.$(OBJ_SUFFIX) \
-    io/$(OBJDIR)/prmwait.$(OBJ_SUFFIX) \
     io/$(OBJDIR)/prmapopt.$(OBJ_SUFFIX) \
     io/$(OBJDIR)/priometh.$(OBJ_SUFFIX) \
     io/$(OBJDIR)/pripv6.$(OBJ_SUFFIX) \
     io/$(OBJDIR)/prlayer.$(OBJ_SUFFIX) \
     io/$(OBJDIR)/prlog.$(OBJ_SUFFIX) \
     io/$(OBJDIR)/prmmap.$(OBJ_SUFFIX) \
-    io/$(OBJDIR)/prpolevt.$(OBJ_SUFFIX) \
     io/$(OBJDIR)/prprf.$(OBJ_SUFFIX) \
     io/$(OBJDIR)/prscanf.$(OBJ_SUFFIX) \
     io/$(OBJDIR)/prstdio.$(OBJ_SUFFIX) \
@@ -178,9 +176,7 @@ OBJS = \
     memory/$(OBJDIR)/prshm.$(OBJ_SUFFIX) \
     memory/$(OBJDIR)/prshma.$(OBJ_SUFFIX) \
     memory/$(OBJDIR)/prseg.$(OBJ_SUFFIX) \
-    misc/$(OBJDIR)/pralarm.$(OBJ_SUFFIX) \
     misc/$(OBJDIR)/pratom.$(OBJ_SUFFIX) \
-    misc/$(OBJDIR)/prcountr.$(OBJ_SUFFIX) \
     misc/$(OBJDIR)/prdtoa.$(OBJ_SUFFIX) \
     misc/$(OBJDIR)/prenv.$(OBJ_SUFFIX) \
     misc/$(OBJDIR)/prerr.$(OBJ_SUFFIX) \
@@ -193,12 +189,8 @@ OBJS = \
     misc/$(OBJDIR)/prlong.$(OBJ_SUFFIX) \
     misc/$(OBJDIR)/prnetdb.$(OBJ_SUFFIX) \
     misc/$(OBJDIR)/praton.$(OBJ_SUFFIX) \
-    misc/$(OBJDIR)/prolock.$(OBJ_SUFFIX)	 \
     misc/$(OBJDIR)/prrng.$(OBJ_SUFFIX)	 \
     misc/$(OBJDIR)/prsystem.$(OBJ_SUFFIX) \
-    misc/$(OBJDIR)/prthinfo.$(OBJ_SUFFIX) \
-    misc/$(OBJDIR)/prtpool.$(OBJ_SUFFIX) \
-    misc/$(OBJDIR)/prtrace.$(OBJ_SUFFIX) \
     misc/$(OBJDIR)/prtime.$(OBJ_SUFFIX)
 
 ifdef USE_PTHREADS
@@ -212,15 +204,12 @@ OBJS += \
     io/$(OBJDIR)/prdir.$(OBJ_SUFFIX) \
     io/$(OBJDIR)/prfile.$(OBJ_SUFFIX) \
     io/$(OBJDIR)/prio.$(OBJ_SUFFIX) \
-    io/$(OBJDIR)/prsocket.$(OBJ_SUFFIX) \
-    misc/$(OBJDIR)/pripcsem.$(OBJ_SUFFIX)
+    io/$(OBJDIR)/prsocket.$(OBJ_SUFFIX)
 
 ifndef USE_BTHREADS
 OBJS += \
 	threads/$(OBJDIR)/prcthr.$(OBJ_SUFFIX) \
-	threads/$(OBJDIR)/prdump.$(OBJ_SUFFIX) \
 	threads/$(OBJDIR)/prmon.$(OBJ_SUFFIX) \
-	threads/$(OBJDIR)/prsem.$(OBJ_SUFFIX) \
 	threads/combined/$(OBJDIR)/prucpu.$(OBJ_SUFFIX) \
 	threads/combined/$(OBJDIR)/prucv.$(OBJ_SUFFIX) \
 	threads/combined/$(OBJDIR)/prulock.$(OBJ_SUFFIX) \
@@ -228,20 +217,6 @@ OBJS += \
 	threads/combined/$(OBJDIR)/pruthr.$(OBJ_SUFFIX)
 endif
 
-endif
-
-ifeq ($(USE_CPLUS), 1)
-OBJS += \
-	cplus/$(OBJDIR)/rcbase.$(OBJ_SUFFIX) \
-	cplus/$(OBJDIR)/rccv.$(OBJ_SUFFIX) \
-	cplus/$(OBJDIR)/rcfileio.$(OBJ_SUFFIX) \
-	cplus/$(OBJDIR)/rcinrval.$(OBJ_SUFFIX) \
-	cplus/$(OBJDIR)/rcio.$(OBJ_SUFFIX) \
-	cplus/$(OBJDIR)/rclock.$(OBJ_SUFFIX) \
-	cplus/$(OBJDIR)/rcnetdb.$(OBJ_SUFFIX) \
-	cplus/$(OBJDIR)/rcnetio.$(OBJ_SUFFIX) \
-	cplus/$(OBJDIR)/rcthread.$(OBJ_SUFFIX) \
-	cplus/$(OBJDIR)/rctime.$(OBJ_SUFFIX)
 endif
 
 ifeq ($(OS_ARCH), WINNT)
