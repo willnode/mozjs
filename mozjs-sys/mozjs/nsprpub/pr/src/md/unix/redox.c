@@ -1,4 +1,3 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
@@ -29,12 +28,6 @@ void _MD_CleanupBeforeExit(void) {}
 void _MD_SET_PRIORITY(_MDThread* thread, PRUintn newPri) { return; }
 
 PRStatus _MD_InitializeThread(PRThread* thread) {
-  /*
-   * set the pointers to the stack-pointer and frame-pointer words in the
-   * context structure; this is for debugging use.
-   */
-  thread->md.sp = _MD_GET_SP_PTR(thread);
-  thread->md.fp = _MD_GET_FP_PTR(thread);
   return PR_SUCCESS;
 }
 
