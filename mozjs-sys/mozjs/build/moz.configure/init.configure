@@ -525,6 +525,8 @@ def split_triplet(triplet, allow_wasi=False):
         canonical_os = canonical_kernel = "NetBSD"
     elif os.startswith("openbsd"):
         canonical_os = canonical_kernel = "OpenBSD"
+    elif os.startswith("redox"):
+        canonical_os = canonical_kernel = "Redox"
     elif os.startswith("solaris"):
         canonical_os = canonical_kernel = "SunOS"
     elif os.startswith("wasi") and allow_wasi:
@@ -961,6 +963,15 @@ def target_is_freebsd(target):
 
 
 set_define("XP_FREEBSD", target_is_freebsd)
+
+
+@depends(target)
+def target_is_redox(target):
+    if target.kernel == "Redox":
+        return True
+
+
+set_define("XP_REDOX", target_is_redox)
 
 
 @depends(target)

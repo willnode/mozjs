@@ -113,6 +113,8 @@ void ThisThread::SetName(const char* name) {
   rv = 0;
 #elif defined(__NetBSD__)
   rv = pthread_setname_np(pthread_self(), "%s", (void*)name);
+#elif defined(__redox__)
+  rv = 0;
 #else
   rv = pthread_setname_np(pthread_self(), name);
 #endif

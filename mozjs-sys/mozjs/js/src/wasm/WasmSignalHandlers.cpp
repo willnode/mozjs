@@ -251,6 +251,21 @@ using namespace js::wasm;
 #    define RFP_sig(p) ((p)->thread.__fp)
 #    define R31_sig(p) ((p)->thread.__sp)
 #    define RLR_sig(p) ((p)->thread.__lr)
+#  elif defined(XP_REDOX)
+#    if defined(__x86_64__)
+#      define EIP_sig(p) ((p)->uc_mcontext.rip)
+#      define EBP_sig(p) ((p)->uc_mcontext.rbp)
+#      define ESP_sig(p) ((p)->uc_mcontext.rsp)
+#      define RIP_sig(p) ((p)->uc_mcontext.rip)
+#      define RSP_sig(p) ((p)->uc_mcontext.rsp)
+#      define RBP_sig(p) ((p)->uc_mcontext.rbp)
+#      define R11_sig(p) ((p)->uc_mcontext.r11)
+#      define R13_sig(p) ((p)->uc_mcontext.r13)
+#      define R14_sig(p) ((p)->uc_mcontext.r14)
+#      define R15_sig(p) ((p)->uc_mcontext.r15)
+#    else
+#      error "Signal handlers on Redox is __x86_64__ only."
+#    endif
 #  else
 #    error \
         "Don't know how to read/write to the thread state via the mcontext_t."

@@ -894,7 +894,7 @@ bool AppendToRootedObjectVector(JS::PersistentRootedObjectVector* v,
 
 void DeleteRootedObjectVector(JS::PersistentRootedObjectVector* v) { delete v; }
 
-#if defined(__linux__) || defined(__wasi__)
+#if defined(__linux__) || defined(__wasi__) || defined(__redox__)
 #  include <malloc.h>
 #elif defined(__FreeBSD__)
 #  include <malloc_np.h>
@@ -916,7 +916,7 @@ static size_t MallocSizeOf(const void* aPtr) {
     return 0;
   }
 
-#if defined(__linux__) || defined(__wasi__) || defined(__FreeBSD__)
+#if defined(__linux__) || defined(__wasi__) || defined(__FreeBSD__) || defined(__redox__)
   return malloc_usable_size((void*)aPtr);
 #elif defined(__APPLE__)
   return malloc_size((void*)aPtr);

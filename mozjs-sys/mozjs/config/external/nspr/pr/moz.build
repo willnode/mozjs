@@ -75,6 +75,14 @@ elif CONFIG["OS_TARGET"] == "SunOS":
         # macros (ENTRY/SET_SIZE); without preprocessing it won't build.
         ASFLAGS += ["-x", "assembler-with-cpp"]
         SOURCES += ["/nsprpub/pr/src/md/unix/os_SunOS_sparcv9.s"]
+elif CONFIG["OS_TARGET"] == "Redox":
+    DEFINES["REDOX"] = True
+    DEFINES["HAVE_POINTER_LOCALTIME_R"] = False
+    DEFINES["_GNU_SOURCE"] = True
+    SOURCES += ["/nsprpub/pr/src/md/unix/redox.c"]
+    if CONFIG["TARGET_CPU"] == "x86_64":
+        SOURCES += ["/nsprpub/pr/src/md/unix/os_Redox_x86_64.s"]
+
 elif CONFIG["OS_TARGET"] == "WINNT":
     OS_LIBS += [
         "advapi32",
