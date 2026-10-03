@@ -18,9 +18,9 @@ static Maybe<uint64_t> mStartIncludingSuspendMs;
 namespace mozilla {
 
 void InitializeUptime() {
-  MOZ_RELEASE_ASSERT(mStartIncludingSuspendMs.isNothing() &&
-                         mStartExcludingSuspendMs.isNothing(),
-                     "Must not be called more than once");
+  if(!(mStartIncludingSuspendMs.isNothing() && mStartExcludingSuspendMs.isNothing())) {
+    return; // redox: initialized twice
+  }
   mStartIncludingSuspendMs = NowIncludingSuspendMs();
   mStartExcludingSuspendMs = NowExcludingSuspendMs();
 }
